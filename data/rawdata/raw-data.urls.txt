@@ -1,0 +1,4 @@
+https://gml.noaa.gov/webdata/ccgg/trends/n2o/n2o_annmean_gl.csv
+https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_annmean_gl.csv
+https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_mlo.csv
+https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv
