@@ -2,148 +2,130 @@
 
 # 0. Set Up --------------------------------------------------------------------
 library(dplyr)
+library(ggplot2); theme_set(theme_bw())
+library(hector)
+library(tidyr)
 
-# 1. Natural N2O Emissions -----------------------------------------------------
+# Using observations of N2O concentrations and the anthropocentric N2O emissions
+# back calculate the natural N2O emissions for Hector
+# Args
+#   n2o_conc: data frame of observations of global N2O concentrations
+#   total_emiss: data frame of Hector's N2O_emissions
+# Returns: data frame of the N2O natural emissions for Hector
+get_natural_N2O <- function(n2o_conc, total_emiss){
 
-# Assume there is no change in N2O concentrations per time step.
-dN2O <- 0
-
-# Parameter values from hector ini files...
-N0=273.87 		# (ppb) preindustrial nitrous oxide from IPCC AR6 table 7.SM.1
-UC_N2O=4.8		# TgN/ppbv unit conversion between emissions and concentrations
-TN2O0=132       # initial lifetime of N2O, years
-
-# Load the n2o emissions from the input table.
-system.file(package = "hector", "input/tables") %>%
-    list.files(pattern = "ssp245", full.names = TRUE) %>%
-    read.csv(comment.char = ";") %>%
-    select(year = Date, N2O_emissions, N2O_constrain) %>%
-    filter(year <= 2015) ->
-    n2o_inputs
+    # Confirm that we are only working with the correct variables.
+    stopifnot(unique(total_emiss$variable) == EMISSIONS_N2O())
+    stopifnot(unique(n2o_conc$variable) == CONCENTRATIONS_N2O())
 
 
-# dN2O <- diff(n2o_inputs$N2O_constrain)
-# E_n2o <- n2o_inputs$N2O_emissions
-# n2o_conc <- n2o_inputs$N2O_constrain
+    # As defined in table S2 of Dorheim et al. 2024
+    tau_0 <- 132
+    N2O_conc_0 <- 273.87
 
+    # Save information about the number of entries
+    n <- nrow(n2o_conc)
 
-# attempt 2 -------
+    # Determine the change in N2O concentrations
+    # per time step.
+    delta_n2o <- diff(n2o_conc$value)
 
-n2o_conc_inputs <- n2o_inputs$N2O_constrain
-E_n2o <- n2o_inputs$N2O_emissions
+    # Calculate N2O lifetime
+    tau_n2o <- tau_0 * (n2o_conc$value[1:n-1]/N2O_conc_0)^(-0.05)
 
-n2o_conc <- 273.7540
-nat_emiss <- c()
+    # Calculate the total emissions based on equation (S1)
+    my_emiss <- 4.8 * (delta_n2o + n2o_conc$value[1:n-1]/tau_n2o)
 
-for(t in 2:nrow(n2o_inputs)){
+    # Calculate the difference between total emissions associated with
+    # n2o concentrations and the anthropocentric emissions.
+    natural_emiss <- my_emiss-total_emiss$value[2:n]
 
-    tau_n2o_t <- TN2O0 * (n2o_conc[t-1]/N0) ^ (-0.05)
-    dn2o_t <- n2o_conc_inputs[t] - n2o_conc[t-1]
+    data.frame(year = total_emiss$year[1:n-1]+1,
+               value = natural_emiss,
+               variable = NAT_EMISSIONS_N2O()) %>%
+        na.omit() %>%
+        mutate(units = getunits(NAT_EMISSIONS_N2O())) ->
+        out
 
-    total_emiss_t <- (dn2o_t + n2o_conc[t-1]/tau_n2o_t) * UC_N2O
-    nat_emiss_t <- total_emiss_t - E_n2o[t]
-    n2o_conc_t <- n2o_conc[t-1] + dn2o_t
-    n2o_conc <- c(n2o_conc, n2o_conc_t)
-
-    nat_emiss <- c(nat_emiss, nat_emiss_t)
+    return(out)
 
 }
 
-# format the results as a data frame
-data.frame(year = n2o_inputs$year[-1],
-           value = nat_emiss,
-           variable = NAT_EMISSIONS_N2O(),
-           units = getunits(NAT_EMISSIONS_N2O())) ->
-    hist_nat_df
+# 1. Data  ---------------------------------------------------------------------
 
-hist_nat_df %>%
+system.file(package = "hector", "input/tables") %>%
+    list.files("ssp245_emiss-constraints_rf.csv", full.names = TRUE) %>%
+    read.csv(comment.char = ";") %>%
+    select(Date, N2O_emissions, N2O_constrain) %>%
+    filter(Date <= 2016) %>%
+    # Change the format from wide to long
+    pivot_longer(names_to = "variable", cols = c(N2O_emissions, N2O_constrain)) %>%
+    rename(year = Date) ->
+    hector_inputs
+
+
+hector_inputs %>%
+    filter(variable == EMISSIONS_N2O()) ->
+    n2o_emiss
+
+
+hector_inputs %>%
+    filter(variable == N2O_CONSTRAIN()) %>%
+    mutate(variable = CONCENTRATIONS_N2O()) ->
+    n2o_conc
+
+# the historical N2O emissions
+hist_emiss <- get_natural_N2O(n2o_conc = n2o_conc,  total_emiss = n2o_emiss)
+
+# Use the last decade of the historical natural emissions to for the
+# future values.
+hist_emiss %>%
     filter(year %in% 2005:2015) %>%
     pull(value) %>%
     mean ->
-    fut_nat_n2o_value
-
+    future_val
 
 data.frame(year = 2016:2100,
-           value = fut_nat_n2o_value,
+           value = future_val,
            variable = NAT_EMISSIONS_N2O(),
            units = getunits(NAT_EMISSIONS_N2O())) ->
-    fut_nat_n2o_df
+    future_emiss
 
-hist_nat_df %>%
-    bind_rows(fut_nat_n2o_df) ->
-    nat_n2o_df
 
-# Save as a data.frame
-nat_n2o_df %>%
-    select(Date = year, N2O_natural_emissions = value) ->
+
+hist_emiss %>%
+    bind_rows(future_emiss) %>%
+    select(Date = year,
+           N2O_natural_emissions = value) ->
     out
 
+
 write.csv(out,
-          file = file.path("inputs", "tables", "nat_n2o.csv"),
+          file = here::here("inputs", "tables", "nat_n2o.csv"),
           row.names = FALSE)
 
-# 3. Plots ---------------------------------------------------------------------
 
-# default hector
-ini <- system.file(package = "hector", "input/hector_ssp245.ini")
-hc <- newcore(ini)
-run(hc)
 
-fetchvars(hc, 1745:2015, vars = CONCENTRATIONS_N2O()) %>%
-    mutate(scenario = "v32") ->
-    n2o1
+# 2. Testing  ------------------------------------------------------------------
 
-n2o_inputs %>%
-    filter(year <= 2015) %>%
-    select(year, value = N2O_constrain) %>%
-    mutate(variable = CONCENTRATIONS_N2O(),
-           scenario = "rmip") ->
-    rcmip_n2o
+if(FALSE){
 
-fetchvars(hc, 1745:2015, vars = NAT_EMISSIONS_N2O()) %>%
-    mutate(scenario = "v32") ->
-    nat1
+    # Let's run hector with these emissions and see how the comparison looks!
 
-# Try running hector with the newly calculated natural n2o emissions
-setvar(core = hc,
-       dates = hist_nat_df$year,
-       var = NAT_EMISSIONS_N2O(),
-       values = nat_emiss,
-       unit = getunits(NAT_EMISSIONS_N2O()))
+    ini <- system.file(package =  "hector", "input/hector_ssp245.ini")
+    hc <- newcore(ini)
+    setvar(hc, dates = hist_emiss$year+1, var = NAT_EMISSIONS_N2O(),
+           values = hist_emiss$value, unit = getunits(NAT_EMISSIONS_N2O()))
+    reset(hc)
+    run(hc)
+    fetchvars(hc,  1745:2015, vars = CONCENTRATIONS_N2O()) ->
+        out
 
-reset(hc)
-run(hc)
 
-fetchvars(hc, 1745:2015, vars = CONCENTRATIONS_N2O()) %>%
-    mutate(scenario = "new") ->
-    n2o2
-
-# natural n2o emiss
-nat1 %>%
-    bind_rows(hist_nat_df %>% mutate(scenario = "new")) %>%
     ggplot() +
-    geom_line(aes(year, value, color = scenario)) +
-    labs(title = NAT_EMISSIONS_N2O(),
-         y = NULL, x = NULL) +
-    theme(legend.title = element_blank()) ->
-    plot; plot
+        geom_line(data = n2o_conc, aes(year, value)) +
+        geom_line(data = out, aes(year, value))
 
-ggsave(plot = plot,
-       filename = file.path("figs", "natural_n2o_emiss.png"),
-       height = 5, width = 5)
+}
 
-# the n2o concentrations
-rcmip_n2o %>%
-    bind_rows(n2o1,
-              n2o2) %>%
-    ggplot() +
-    geom_line(aes(year, value, color = scenario, linetype = scenario)) +
-    labs(title = CONCENTRATIONS_N2O(),
-         y = NULL, x = NULL) +
-    theme(legend.title = element_blank()) ->
-    plot; plot
-
-ggsave(plot = plot,
-       filename = file.path("figs", "n2o_conc.png"),
-       height = 5, width = 5)
 
