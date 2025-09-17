@@ -1,0 +1,232 @@
+
+# As helpful as possible recreate the figure from the 2024 GMD article
+
+# 0. Set Up -----------------------------------------------------------------
+source("scripts/fxns_calibration.R")
+
+## Load Hector Results
+
+"data/GMD_2024/" %>%
+    list.files(pattern = "hector_3.2.0_ssp.csv", full.names = TRUE) %>%
+    lapply(read.csv) %>%
+    do.call(what = "rbind") %>%
+    filter(year <= 2100) ->
+    hector_ssp
+
+"data/GMD_2024/" %>%
+list.files(pattern = "hector_3.2.0_ssp-conc.csv", full.names = TRUE) %>%
+    lapply(read.csv) %>%
+    do.call(what = "rbind") %>%
+    filter(year <= 2100) ->
+    hector_ssp_conc
+
+
+
+
+# Comparison with Observations
+
+## Atmospheric CO~2~
+
+# Meinshausen, M., Vogel, E., Nauels, A., Lorbacher, K., Meinshausen, N., Etheridge, D. M.,
+# Fraser, P. J., Montzka, S. A., Rayner, P. J., Trudinger, C. M., Krummel, P. B., Beyerle,
+# U., Canadell, J. G., Daniel, J. S., Enting, I. G., Law, R. M., Lunder, C. R., O'Doherty,
+# S., Prinn, R. G., Reimann, S., Rubino, M., Velders, G. J. M., Vollmer, M. K., Wang,
+# R. H. J., and Weiss, R.: Historical greenhouse gas concentrations for climate modelling
+# (CMIP6), Geosci. Model Dev., 10, 2057–2116, https://doi.org/10.5194/gmd-10-2057-2017, 2017.
+here::here("data/GMD_2024/", "Supplementary_Table_UoM_GHGConcentrations-1-1-0_annualmeans_v23March2017.csv") %>%
+    read.csv(skip = 21) %>%
+    na.omit %>%
+    select(year =  "v.YEARS.GAS..", value = "CO2") %>%
+    mutate(variable = "co2 obs") ->
+    cmip6_co2_obs
+
+hector_ssp %>%
+    filter(variable == CONCENTRATIONS_CO2()) %>%
+    filter(scenario == "ssp119") %>%
+    filter(year <= 2014) ->
+    hector_co2
+
+# The cmip6_co2_obs data needs to be split into two categories to indicate the period of time
+# that was used in the calibration process.
+cmip6_co2_obs %>%
+    filter(year <= 1800) ->
+    inital_obs
+
+
+cmip6_co2_obs %>%
+    filter(year >= 1800) ->
+    cmip6_co2_obs
+
+ggplot() +
+    geom_point(data = inital_obs, aes(year, value, color = "Meinshausen et al 2017")) +
+    geom_line(data = cmip6_co2_obs, aes(year, value, color = "Meinshausen et al 2017")) +
+    geom_line(data = hector_co2, aes(year, value, color = "Hector V3")) +
+    labs(x = "Year", y = expression('CO'[2]~' (ppm)')) +
+    theme(legend.position = "bottom") ->
+    plot; plot
+
+
+
+## Global Mean Surface Temperature
+
+
+# Hadcrut5
+# Global mean surface temperature anomaly
+# https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/download.html
+# The temperature anomaly is based off of 1961–1990
+# surface temperature with the anomaly!
+# Morice, C. P., Kennedy, J. J., Rayner, N. A., Winn, J. P., Hogan, E., Killick, R. E., et al. (2021).
+# An updated assessment of near-surface temperature change from 1850: the HadCRUT5 data
+# set. Journal of Geophysical Research: Atmospheres, 126, e2019JD032361.
+# https://doi.org/10.1029/2019JD032361
+here::here("data/GMD_2024", "HadCRUT5.csv") %>%
+    read.csv(stringsAsFactors = FALSE) %>%
+    na.omit ->
+    hadcrut_obs_data
+names(hadcrut_obs_data) <- c("year", "value", "lower", "upper")
+hadcrut_obs_data$variable <- "gmst"
+hadcrut_obs_data
+
+
+yrs <- hadcrut_obs_data$year
+
+hector_ssp %>%
+    filter(variable == "gmst") %>%
+    filter(scenario == "ssp119") %>%
+    filter(year %in% yrs) %>%
+    normalize_data_fxn(yrs = 1961:1990) %>%
+    na.omit ->
+    hector_gmst
+
+ggplot() +
+    geom_ribbon(data = hadcrut_obs_data, aes(year, ymin = lower, ymax = upper), alpha = 0.2) +
+    geom_line(data = hadcrut_obs_data, aes(year, value, color = "Morice et al., 2021")) +
+    geom_line(data = hector_gmst, aes(year, value, color = "Hector V3"), linewidth = 0.75) +
+    labs(x = "Year", y = expression("Temperature anomaly ("~degree~"C)")) +
+    theme(legend.position = "bottom") ->
+    plot; plot
+
+
+
+
+# CMIP6 Comparison
+
+# Make a plot with the ESMs colored by their ECS labels.
+
+scns <- c("ssp245", "ssp126", "ssp585")
+
+# G. A. Meehl, C. A. Senior, V. Eyring, G. Flato, J.-F. Lamarque, R. J. Stouffer, K. E. Taylor,
+# M. Schlund, Context for interpreting equilibrium climate sensitivity and transient climate response
+# from the CMIP6 Earth system models. Sci. Adv. 6, eaba1981 (2020).
+# Schlund, Manuel, Axel Lauer, Pierre Gentine, Steven C. Sherwood, and Veronika Eyring. 2020.
+# “Emergent Constraints on Equilibrium Climate Sensitivity in CMIP5: Do They Hold for CMIP6?” Earth System Dynamics 11 (4): 1233–58.
+
+# Lovato, T., Peano, D., Butenschön, M., Materia, S., Iovino, D., Scoccimarro, E.,
+# et al. (2022). CMIP6 simulations with the CMCC Earth System Model (CMCCESM2).
+# Journal of Advances in Modeling Earth Systems, 14, e2021MS002814.
+# https://doi.org/10.1029/2021MS002814
+cmip6_ecs <- as.data.frame(rbind(c("ACCESS-CM2", 4.7),
+                                 c("ACCESS-ESM1-5", 3.9),
+                                 c("CAMS-CSM1-0", 2.3),
+                                 c("CanESM5", 5.6),
+                                 c("CESM2", 5.2),
+                                 c("CESM2-WACCM", 4.8),
+                                 c("CMCC-CM2-SR5", 3.52) ,
+                                 c("HadGEM3-GC31-LL", 5.6),
+                                 c("MIROC-ES2L", 2.7),
+                                 c("MIROC6", 2.6),
+                                 c("MRI-ESM2-0", 3.2),
+                                 c("NorESM2-MM", 2.5),
+                                 c("TaiESM1", 4.31),
+                                 c("UKESM1-0-LL", 5.3),
+                                 c("CMCC-ESM2", 3.57)))
+names(cmip6_ecs) <- c("model", "ecs")
+
+
+# TS.3.2 Climate Sensitivity and Earth System Feedbacks
+# the likely range is 2.5°C to 4°C and the very likely range is 2°C to 5°C.
+cmip6_ecs %>%
+    mutate(id = "not very likely") %>%
+    mutate(id = ifelse(ecs >= 2 & ecs <= 5, "very likely", id)) ->
+    ecs_table
+
+read.csv(here::here("data/GMD_2024", "cmip6_model_means.csv")) %>%
+    dplyr::filter(scenario %in% scns)  %>%
+    filter(model %in% cmip6_ecs$model) %>%
+    full_join(ecs_table, by = "model") ->
+    cmip6_rslts
+
+hector_ssp_conc %>%
+    filter(year %in% 1850:2100) %>%
+    filter(variable %in% c(SST(), GLOBAL_TAS(),  LAND_TAS())) %>%
+    filter(scenario %in% cmip6_rslts$scenario) ->
+    hector_temp
+
+# Normalize the Hector temperatures to the CMIP6 reference period
+split(hector_temp, interaction(hector_temp$variable, hector_temp$scenario), drop = TRUE) %>%
+    lapply(FUN = normalize_data_fxn, yrs = 1850:1900) %>%
+    do.call(what = "rbind") ->
+    hector_temp
+
+cmip6_rslts %>%
+    group_by(scenario, year, variable, id) %>%
+    summarise(min = min(value),
+              max = max(value)) ->
+    cmip6_temp_summary
+
+# Create the labels
+temp_labs <- c("Global Mean Air Temp.", "Mean Land Surface Temp.", "Mean Sea Surface Temp.")
+names(temp_labs) <-   c(GLOBAL_TAS(), LAND_TAS(), SST())
+
+ggplot() +
+    geom_ribbon(data = cmip6_temp_summary, aes(year, ymin = min, ymax = max, fill = id), alpha = 0.9) +
+    geom_line(data = hector_temp, aes(year, value, color = "Hector V3"), size = 1) +
+    facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
+    labs(y = expression("Temperature anomaly relative to 1850-1860 ("~degree~"C)"), x = "Year") +
+    scale_fill_manual(values = c("very likely" = "#5A5A5A",
+                                 "not very likely" = "#D3D3D3")) +
+    theme(panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.position = "bottom") +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) ->
+    plot; plot
+
+
+ggplot() +
+    geom_line(data = cmip6_rslts, aes(year, value, group = interaction(model), color = "CMIP6 ESM"), alpha = 0.5) +
+    geom_line(data = hector_temp, aes(year, value, color = "Hector V3"),) +
+    facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
+    labs(y = expression("Temperature anomaly ("~degree~"C)"), x = "Years") +
+    theme(panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.position = "bottom") +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) ->
+    plot; plot
+
+
+## Idealized Runs
+
+
+
+max_yr <- 150
+hector_idealized <- read.csv(file.path("data/GMD_2024", "hector_3.2.0_idealized.csv")) %>%
+    filter(variable == GLOBAL_TAS()) %>%
+    mutate(scenario = if_else(scenario ==  "abruptx4CO2", "abrupt-4xCO2", scenario)) %>%
+    filter(year <= max_yr)
+cmip6_idealized <- read.csv(here::here("data/GMD_2024", "cmip6_idealized.csv")) %>%
+    filter(year <= max_yr) %>%
+    rename(scenario = experiment)
+
+
+ggplot() +
+    geom_line(data = cmip6_idealized, aes(year, value, group = interaction(model, ensemble),
+                                          color = "CMIP6 ESM"), alpha = 0.5) +
+    geom_line(data = hector_idealized, aes(year, value, color = "Hector V3"),
+              linewidth = 1) +
+    facet_wrap("scenario", scales = "free") +
+    labs(y = expression("Temperature anomaly ("~degree~"C)"), x = "Years") +
+    theme(panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.position = "bottom") +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) ->
+    plot; plot

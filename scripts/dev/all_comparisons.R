@@ -19,15 +19,18 @@ here::here("data", "ar6.csv") %>%
     read.csv ->
     ar6_data
 
-# here::here("data", "hector_v32.csv") %>%
-#     read.csv ->
-#     hector_v32
+here::here("data", "default_v32.csv") %>%
+    read.csv ->
+    hector_v32
 
-hector_v32 <- NULL
-
-here::here("data", "hector_v349.csv") %>%
+here::here("data", "default_v349.csv") %>%
     read.csv ->
     hector_v349
+
+bind_rows(hector_v32,
+          hector_v349) %>%
+    filter(scenario %in% ar6_data$scenario) ->
+    hector_old
 
 bind_rows(read.csv("data/experiments/exp1_gcam-benchmarks.csv"),
           read.csv("data/experiments/exp2-benchmarks.csv")) %>%
@@ -64,12 +67,12 @@ selected_colors <- hue_pal()(num)
 
 COLORS_RSLTS <- selected_colors
 names(COLORS_RSLTS) <- unique(hector_rslts$scenario)
-COLORS_RSLTS <- c(COLORS_RSLTS, "obs" = "black")
+COLORS_RSLTS <- c(COLORS_RSLTS, "obs" = "black", "old hector" = "grey")
 
 
 COLORS_METRICS <- selected_colors
 names(COLORS_METRICS) <- unique(new$source)
-COLORS_METRICS <- c(COLORS_METRICS, "ar6" = "black", "v32" = "black")
+COLORS_METRICS <- c(COLORS_METRICS, "ar6" = "black", "v32" = "black", "old hector" =  "grey")
 
 
 # 2. Future Warming  -----------------------------------------------------------
@@ -81,11 +84,10 @@ ar6_data %>%
     ar6_future_warming
 
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
-hector_v32 %>%
-    bind_rows(hector_v349) %>%
+hector_old %>%
     filter(variable == "global_tas",
            units == "degC rel. 1995-2014") ->
-    releases_future_warming
+    old_future_warming
 
 new %>%
     filter(variable == "global_tas",
@@ -97,7 +99,7 @@ ggplot() +
                   aes(year, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_future_warming, aes(year, value, color = "ar6"), shape = 4) +
-    geom_point(data = releases_future_warming, aes(year, value, color = "v32"),
+    geom_point(data = old_future_warming, aes(year, value, color = "old hector"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_future_warming, aes(year, value, color = source),
                position = position_jitter(height = 0, width = JW)) +
@@ -119,9 +121,9 @@ ar6_data %>%
     ar6_key_metrics
 
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
-hector_v32 %>%
+hector_old %>%
     filter(variable %in% vars) ->
-    v32_key_metrics
+    old_key_metrics
 
 
 new %>%
@@ -134,7 +136,7 @@ ggplot() +
                   aes(variable, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_key_metrics, aes(variable, value, color = "ar6"), shape = 4) +
-    geom_point(data = v32_key_metrics, aes(variable, value, color = "v32"),
+    geom_point(data = old_key_metrics, aes(variable, value, color = "old hector"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_key_metrics, aes(variable, value, color = source),
                position = position_jitter(height = 0, width = JW)) +
@@ -155,9 +157,9 @@ ar6_data %>%
     ar6_hist
 
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
-hector_v32 %>%
+hector_old %>%
     filter(variable %in% vars) ->
-    v32_hist
+    old_hist
 
 
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
@@ -172,7 +174,7 @@ ggplot() +
                   aes(variable, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_hist, aes(variable, value, color = "ar6"), shape = 4) +
-    geom_point(data = v32_hist, aes(variable, value, color = "v32"),
+    geom_point(data = old_hist, aes(variable, value, color = "old hector"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_hist, aes(variable, value, color = source),
                position = position_jitter(height = 0, width = JW)) +
@@ -279,21 +281,17 @@ hector_ssps %>%
     geom_line() +
     labs(title = CONCENTRATIONS_CO2())
 
-
 hector_ssps %>%
     filter(variable == NPP()) %>%
     ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
     geom_line() +
     labs(title = NPP())
 
-
 hector_ssps %>%
     filter(variable == SST()) %>%
     ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
     geom_line() +
     labs(title = SST())
-
-
 
 hector_ssps %>%
     filter(variable == HEAT_FLUX()) %>%

@@ -1,0 +1,33 @@
+scenario,year,variable,units,value,source
+ssp119,2021-2040,global_tas,degC rel. 1995-2014,0.73,v349
+ssp119,2041-2060,global_tas,degC rel. 1995-2014,0.895,v349
+ssp119,2081-2100,global_tas,degC rel. 1995-2014,0.717,v349
+ssp126,2021-2040,global_tas,degC rel. 1995-2014,0.745,v349
+ssp126,2041-2060,global_tas,degC rel. 1995-2014,1.08,v349
+ssp126,2081-2100,global_tas,degC rel. 1995-2014,1.1,v349
+ssp245,2021-2040,global_tas,degC rel. 1995-2014,0.75,v349
+ssp245,2041-2060,global_tas,degC rel. 1995-2014,1.29,v349
+ssp245,2081-2100,global_tas,degC rel. 1995-2014,1.98,v349
+ssp370,2021-2040,global_tas,degC rel. 1995-2014,0.761,v349
+ssp370,2041-2060,global_tas,degC rel. 1995-2014,1.43,v349
+ssp370,2081-2100,global_tas,degC rel. 1995-2014,2.94,v349
+ssp434,2021-2040,global_tas,degC rel. 1995-2014,0.725,v349
+ssp434,2041-2060,global_tas,degC rel. 1995-2014,1.11,v349
+ssp434,2081-2100,global_tas,degC rel. 1995-2014,1.37,v349
+ssp460,2021-2040,global_tas,degC rel. 1995-2014,0.756,v349
+ssp460,2041-2060,global_tas,degC rel. 1995-2014,1.34,v349
+ssp460,2081-2100,global_tas,degC rel. 1995-2014,2.3,v349
+ssp534-over,2021-2040,global_tas,degC rel. 1995-2014,0.877,v349
+ssp534-over,2041-2060,global_tas,degC rel. 1995-2014,1.63,v349
+ssp534-over,2081-2100,global_tas,degC rel. 1995-2014,1.69,v349
+ssp585,2021-2040,global_tas,degC rel. 1995-2014,0.877,v349
+ssp585,2041-2060,global_tas,degC rel. 1995-2014,1.74,v349
+ssp585,2081-2100,global_tas,degC rel. 1995-2014,3.79,v349
+historical,2019,non_ghg_ERF,W/m2,-1.122730223,v349
+historical,2019,wmghg_ERF,W/m2,3.871814353,v349
+historical,2019,RF_CH4,W/m2,0.539827875,v349
+historical,2005-15,tot_aer_ERF,W/m2,-0.416975349,v349
+historical,1971-2018,OHC,ZJ,471.0075314,v349
+historical,1995-2014,hist. warming,degC,0.730189828,v349
+NA,NA,TCR,NA,1.511152588,v349
+NA,NA,TCRE,NA,1.51115259,v349
