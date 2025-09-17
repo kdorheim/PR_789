@@ -1,4 +1,4 @@
-
+# Compare all of the possible results against one another...
 
 # 0. Set Up --------------------------------------------------------------------
 source("scripts/fxns_calibration.R")
@@ -14,39 +14,65 @@ JW <- 0
 
 # 1. Load Data -----------------------------------------------------------------
 
-# The benchmark results
+## 1A. Benchmark table values ---------------------------------------------------
 here::here("data", "ar6.csv") %>%
     read.csv ->
     ar6_data
 
-here::here("data", "hector_v32.csv") %>%
-    read.csv ->
-    hector_v32
+# here::here("data", "hector_v32.csv") %>%
+#     read.csv ->
+#     hector_v32
 
-# Load the calibration results.
+hector_v32 <- NULL
+
+here::here("data", "hector_v349.csv") %>%
+    read.csv ->
+    hector_v349
+
 bind_rows(read.csv("data/experiments/exp1_gcam-benchmarks.csv"),
           read.csv("data/experiments/exp2-benchmarks.csv")) %>%
     filter(scenario %in% ar6_data$scenario) ->
     new
 
-
-# Load the hector results
+## 1B. historical hector for obs. comparison  -----------------------------------
+# Load the hector results to be use in the comparison with observations
 bind_rows(read.csv("data/experiments/exp1_hector.csv"),
-          read.csv("data/experiments/exp2_hector.csv")) ->
+          read.csv("data/experiments/exp2_hector.csv"),
+          read.csv("data/hector_v32.csv"),
+          read.csv("data/hector_v349.csv")) ->
     hector_rslts
 
+## 1C. hector ssps --------------------------------------------------------------
+
+# Load the ssp hector results
+bind_rows(read.csv("data/hector_v32_ssps.csv"),
+          read.csv("data/hector_v349_ssps.csv"),
+          read.csv("data/experiments/hector_exp1_ssps.csv"),
+          read.csv("data/experiments/hector_exp2_ssps.csv")) ->
+    hector_ssps
 
 
-selected_colors <- paletteer_d("colorBlindness::PairedColor12Steps")[1:length(unique(hector_rslts$scenario))]
-COLORS_RSLTS <- c(selected_colors, "black")
-names(COLORS_RSLTS) <- c(unique(hector_rslts$scenario), "obs")
 
 
-COLORS_METRICS <- c(selected_colors, "black", "black")
-names(COLORS_METRICS) <- c(unique(new$source), "ar6", "v32")
+## 1D. Colors -------------------------------------------------------------------
+
+# have each scenario or experiment correspond to a unique color code
+num <- length(unique(new$scenario))
+show_col(hue_pal()(num))
+selected_colors <- hue_pal()(num)
 
 
-# 2. Future Warming ------------------------------------------------------------
+COLORS_RSLTS <- selected_colors
+names(COLORS_RSLTS) <- unique(hector_rslts$scenario)
+COLORS_RSLTS <- c(COLORS_RSLTS, "obs" = "black")
+
+
+COLORS_METRICS <- selected_colors
+names(COLORS_METRICS) <- unique(new$source)
+COLORS_METRICS <- c(COLORS_METRICS, "ar6" = "black", "v32" = "black")
+
+
+# 2. Future Warming  -----------------------------------------------------------
 
 # Get the AR6 values, these are the ultimate benchmark for comparisons.
 ar6_data %>%
@@ -56,9 +82,10 @@ ar6_data %>%
 
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
 hector_v32 %>%
+    bind_rows(hector_v349) %>%
     filter(variable == "global_tas",
            units == "degC rel. 1995-2014") ->
-    v32_future_warming
+    releases_future_warming
 
 new %>%
     filter(variable == "global_tas",
@@ -70,7 +97,7 @@ ggplot() +
                   aes(year, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_future_warming, aes(year, value, color = "ar6"), shape = 4) +
-    geom_point(data = v32_future_warming, aes(year, value, color = "v32"),
+    geom_point(data = releases_future_warming, aes(year, value, color = "v32"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_future_warming, aes(year, value, color = source),
                position = position_jitter(height = 0, width = JW)) +
@@ -79,13 +106,8 @@ ggplot() +
          x = NULL) +
     facet_wrap("scenario", scales = "free", ncol = 1) +
     theme(legend.position = "bottom", legend.title = element_blank()) +
-    scale_color_manual(values = COLORS_METRICS)
-    plot; plot
-
-ggsave(plot = plot,
-       filename = file.path("figs", "future_warming.png"),
-       height = 10, width = 5)
-
+    scale_color_manual(values = COLORS_METRICS) ->
+plot; plot
 
 # 3. Key Metrics --------------------------------------------------------------
 # The "variables" to be considered here...
@@ -122,11 +144,6 @@ ggplot() +
     theme(legend.position = "bottom", legend.title = element_blank()) +
     scale_color_manual(values = COLORS_METRICS) ->
     plot; plot
-
-ggsave(plot = plot,
-       filename = file.path("figs", "key_metrics.png"),
-       height = 5, width = 5)
-
 
 # 4. Historical Benchmarks  ----------------------------------------------------
 # The "variables" to be considered here...
@@ -167,12 +184,6 @@ ggplot() +
     scale_color_manual(values = COLORS_METRICS) ->
     plot; plot
 
-ggsave(plot = plot,
-       filename = file.path("figs", "key_metrics.png"),
-       height = 5, width = 5)
-
-
-
 
 # 5. Hector vs. Obs ------------------------------------------------------------
 
@@ -210,15 +221,83 @@ hector_v_obs_fxn <- function(hector_data, vars, SAVE = FALSE){
 }
 
 
-
-hector_v_obs_fxn(hector_rslts, vars = CONCENTRATIONS_CO2())
-
-
-
-
-
-
-# 5. Hector vs. Obs ------------------------------------------------------------
+hector_rslts %>%
+    select(scenario, year, variable, hector = value) %>%
+    left_join(comparison_data, by = join_by(year, variable)) %>%
+    mutate(diff = abs(hector - value)) ->
+    wide_obs_v_hector
 
 
+wide_obs_v_hector %>%
+    filter(!is.na(diff)) %>%
+    summarise(MAE = mean(diff), .by = c(scenario, variable)) %>%
+    ggplot() +
+    geom_bar(aes(scenario, MAE),  stat = "identity") +
+    facet_wrap("variable", scales = "free") +
+    labs(title = "Mean Abolute Error",
+         subtitle = "Historical Hector vs. Obs")
+
+wide_obs_v_hector %>%
+    filter(!is.na(diff)) %>%
+    filter(variable == CONCENTRATIONS_CO2()) %>%
+    ggplot(aes(year, diff, color = scenario)) +
+    geom_line() +
+    labs(title = "Abosolute Error",
+         y = "Absolute Error",
+         subtitle = CONCENTRATIONS_CO2())
+
+wide_obs_v_hector %>%
+    filter(variable == "OHC") %>%
+    filter(!is.na(diff)) %>%
+    ggplot(aes(year, diff, color = scenario)) +
+    geom_line() +
+    labs(title = "Abosolute Error",
+         y = "Absolute Error",
+         subtitle = "ocean heat content")
+
+wide_obs_v_hector %>%
+    filter(variable == GMST()) %>%
+    filter(!is.na(diff)) %>%
+    ggplot(aes(year, diff, color = scenario)) +
+    geom_line() +
+    labs(title = "Abosolute Error",
+         y = "Absolute Error",
+         subtitle = GMST())
+
+# 6. SSP scenarios ------------------------------------------------------------
+
+# How do the future scenarios compare to one another??
+hector_ssps %>%
+    filter(variable == GMST()) %>%
+    ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
+    geom_line() +
+    labs(title = GMST())
+
+hector_ssps %>%
+    filter(variable == CONCENTRATIONS_CO2()) %>%
+    ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
+    geom_line() +
+    labs(title = CONCENTRATIONS_CO2())
+
+
+hector_ssps %>%
+    filter(variable == NPP()) %>%
+    ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
+    geom_line() +
+    labs(title = NPP())
+
+
+hector_ssps %>%
+    filter(variable == SST()) %>%
+    ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
+    geom_line() +
+    labs(title = SST())
+
+
+
+hector_ssps %>%
+    filter(variable == HEAT_FLUX()) %>%
+    ggplot(aes(year, value, color = source, group = interaction(scenario, source))) +
+    geom_line() +
+    labs(title = HEAT_FLUX())
 

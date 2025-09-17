@@ -11,11 +11,11 @@ source(here::here("scripts", "constants.R"))
 source(here::here("scripts", "fxns_calibration.R"))
 
 # 1. fxns ----------------------------------------------------------------------
-
-params <- c("S" = 5, "diff" = 2.3, "aero_scalar" = 0.5)
-ini <- system.file(package = "hector", "input/hector_ssp245.ini")
-hc <- newcore(ini)
-run(hc)
+#
+# params <- c("S" = 5, "diff" = 2.3, "aero_scalar" = 0.5)
+# ini <- system.file(package = "hector", "input/hector_ssp245.ini")
+# hc <- newcore(ini)
+# run(hc)
 
 
 
@@ -346,10 +346,83 @@ get_table_metrics <- function(params){
 
 }
 
+# 3. SSP scenarios -------------------------------------------------------------
+
+system.file(package = "hector", "input") %>%
+    list.files(pattern = "ssp", full.names = TRUE) ->
+    ALL_SSPS
+
+VARS <- c(GMST(), NPP(), VEG_C(), CONCENTRATIONS_CO2(),
+          CONCENTRATIONS_CH4(), CONCENTRATIONS_N2O(),
+          HEAT_FLUX(), SST())
+
+# Helper function that runs a batch of ssps for some parameter combination
+# Args
+#   inis: list of input files to run
+#   params: vector of hector parameter values
+#   vars: vector of the hector variable names to save
+#   source: str name of the param combaition
+# Returns: data frame of all the spps included in the inis
+batch_ssp_run <- function(inis = ALL_SSPS, params, vars = VARS, source){
+
+    inis %>%
+        lapply(function(ini){
+            scn <- gsub(pattern = "hector_|.ini", replace = "", x = basename(ini))
+
+            hc <- my_setvar_fxn(newcore(ini, name = scn), pars = params)
+            run(hc)
+            fetchvars(hc, 1750:2100, vars = vars)
+        }) %>%
+        bind_rows %>%
+        mutate(source = source) ->
+        out
+
+    return(out)
+
+
+}
+
+
+
+
+
 # 3. default values ------------------------------------------------------------
 if(FALSE){
+
+    # Generate the dev branch benchmarking resulst....
+    source <- "v349"
+
+    # table values
     default <- get_table_metrics(c("aero_scalar" = 1))
-    write.csv(default, "default_v35.csv", row.names = FALSE)
+    default$source <- source
+    write.csv(default, "data/default_v349.csv", row.names = FALSE)
+
+    # the ssp values
+    out <- batch_ssp_run(params = c("aero_scalar" = 1), source = source)
+    write.csv(out, "data/hector_v349_ssps.csv", row.names = FALSE)
+
+
+    # for the observation comparison
+    # Run Hector with the parameter values
+    ini <- system.file(package = "hector", "input/hector_ssp245.ini")
+    hc <- my_setvar_fxn(newcore(ini), c("aero_scalar" = 1))
+    run(hc)
+    fetchvars_4comparison(hc, comparison_data) %>%
+        rename(value = hector) ->
+        hector_rslts
+    fetchvars(hc, unique(hector_rslts$year),
+              vars = c(CONCENTRATIONS_CH4(), CONCENTRATIONS_N2O())) ->
+        extra
+
+    hector_rslts %>%
+        bind_rows(extra) %>%
+        mutate(scenario = source) ->
+        hector_rslts_full
+
+    write.csv(hector_rslts_full,
+              file = file.path("data", "hector_v349.csv"),
+              row.names = FALSE)
+
 }
 
 

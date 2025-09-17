@@ -1,272 +1,357 @@
-"scenario","year","variable","value","units"
-"Unnamed Hector core",1745,"N2O_concentration",273.87,"ppbv N2O"
-"Unnamed Hector core",1746,"N2O_concentration",273.900073369877,"ppbv N2O"
-"Unnamed Hector core",1747,"N2O_concentration",273.916161671293,"ppbv N2O"
-"Unnamed Hector core",1748,"N2O_concentration",273.930255948327,"ppbv N2O"
-"Unnamed Hector core",1749,"N2O_concentration",273.945351743479,"ppbv N2O"
-"Unnamed Hector core",1750,"N2O_concentration",273.976463699206,"ppbv N2O"
-"Unnamed Hector core",1751,"N2O_concentration",274.004581856001,"ppbv N2O"
-"Unnamed Hector core",1752,"N2O_concentration",274.03670235794,"ppbv N2O"
-"Unnamed Hector core",1753,"N2O_concentration",274.081830248418,"ppbv N2O"
-"Unnamed Hector core",1754,"N2O_concentration",274.123954069873,"ppbv N2O"
-"Unnamed Hector core",1755,"N2O_concentration",274.158094267759,"ppbv N2O"
-"Unnamed Hector core",1756,"N2O_concentration",274.185250188723,"ppbv N2O"
-"Unnamed Hector core",1757,"N2O_concentration",274.20140617965,"ppbv N2O"
-"Unnamed Hector core",1758,"N2O_concentration",274.233562688437,"ppbv N2O"
-"Unnamed Hector core",1759,"N2O_concentration",274.268731859258,"ppbv N2O"
-"Unnamed Hector core",1760,"N2O_concentration",274.295912038744,"ppbv N2O"
-"Unnamed Hector core",1761,"N2O_concentration",274.324093075601,"ppbv N2O"
-"Unnamed Hector core",1762,"N2O_concentration",274.351278617583,"ppbv N2O"
-"Unnamed Hector core",1763,"N2O_concentration",274.402480413155,"ppbv N2O"
-"Unnamed Hector core",1764,"N2O_concentration",274.439675807547,"ppbv N2O"
-"Unnamed Hector core",1765,"N2O_concentration",274.470880952,"ppbv N2O"
-"Unnamed Hector core",1766,"N2O_concentration",274.490098996941,"ppbv N2O"
-"Unnamed Hector core",1767,"N2O_concentration",274.523318094027,"ppbv N2O"
-"Unnamed Hector core",1768,"N2O_concentration",274.54354039159,"ppbv N2O"
-"Unnamed Hector core",1769,"N2O_concentration",274.563776442196,"ppbv N2O"
-"Unnamed Hector core",1770,"N2O_concentration",274.59001279694,"ppbv N2O"
-"Unnamed Hector core",1771,"N2O_concentration",274.607260206482,"ppbv N2O"
-"Unnamed Hector core",1772,"N2O_concentration",274.624508423938,"ppbv N2O"
-"Unnamed Hector core",1773,"N2O_concentration",274.639766301551,"ppbv N2O"
-"Unnamed Hector core",1774,"N2O_concentration",274.657023892211,"ppbv N2O"
-"Unnamed Hector core",1775,"N2O_concentration",274.670292048644,"ppbv N2O"
-"Unnamed Hector core",1776,"N2O_concentration",274.684568024748,"ppbv N2O"
-"Unnamed Hector core",1777,"N2O_concentration",274.695848974123,"ppbv N2O"
-"Unnamed Hector core",1778,"N2O_concentration",274.707133051257,"ppbv N2O"
-"Unnamed Hector core",1779,"N2O_concentration",274.717425910608,"ppbv N2O"
-"Unnamed Hector core",1780,"N2O_concentration",274.726724907121,"ppbv N2O"
-"Unnamed Hector core",1781,"N2O_concentration",274.734022996096,"ppbv N2O"
-"Unnamed Hector core",1782,"N2O_concentration",274.740332233313,"ppbv N2O"
-"Unnamed Hector core",1783,"N2O_concentration",274.743648674771,"ppbv N2O"
-"Unnamed Hector core",1784,"N2O_concentration",274.748972077065,"ppbv N2O"
-"Unnamed Hector core",1785,"N2O_concentration",274.75329119651,"ppbv N2O"
-"Unnamed Hector core",1786,"N2O_concentration",274.759624790143,"ppbv N2O"
-"Unnamed Hector core",1787,"N2O_concentration",274.760953714973,"ppbv N2O"
-"Unnamed Hector core",1788,"N2O_concentration",274.759294629201,"ppbv N2O"
-"Unnamed Hector core",1789,"N2O_concentration",274.759644891105,"ppbv N2O"
-"Unnamed Hector core",1790,"N2O_concentration",274.757996258696,"ppbv N2O"
-"Unnamed Hector core",1791,"N2O_concentration",274.754346290794,"ppbv N2O"
-"Unnamed Hector core",1792,"N2O_concentration",274.753707446543,"ppbv N2O"
-"Unnamed Hector core",1793,"N2O_concentration",274.738079384826,"ppbv N2O"
-"Unnamed Hector core",1794,"N2O_concentration",274.726454166924,"ppbv N2O"
-"Unnamed Hector core",1795,"N2O_concentration",274.708827152225,"ppbv N2O"
-"Unnamed Hector core",1796,"N2O_concentration",274.692209501584,"ppbv N2O"
-"Unnamed Hector core",1797,"N2O_concentration",274.677595775362,"ppbv N2O"
-"Unnamed Hector core",1798,"N2O_concentration",274.659985934133,"ppbv N2O"
-"Unnamed Hector core",1799,"N2O_concentration",274.645376839337,"ppbv N2O"
-"Unnamed Hector core",1800,"N2O_concentration",274.621780052061,"ppbv N2O"
-"Unnamed Hector core",1801,"N2O_concentration",274.606186135006,"ppbv N2O"
-"Unnamed Hector core",1802,"N2O_concentration",274.596596149322,"ppbv N2O"
-"Unnamed Hector core",1803,"N2O_concentration",274.578010856705,"ppbv N2O"
-"Unnamed Hector core",1804,"N2O_concentration",274.558428120752,"ppbv N2O"
-"Unnamed Hector core",1805,"N2O_concentration",274.537850604491,"ppbv N2O"
-"Unnamed Hector core",1806,"N2O_concentration",274.518284671244,"ppbv N2O"
-"Unnamed Hector core",1807,"N2O_concentration",274.498713184411,"ppbv N2O"
-"Unnamed Hector core",1808,"N2O_concentration",274.481155207793,"ppbv N2O"
-"Unnamed Hector core",1809,"N2O_concentration",274.452600205274,"ppbv N2O"
-"Unnamed Hector core",1810,"N2O_concentration",274.429039242341,"ppbv N2O"
-"Unnamed Hector core",1811,"N2O_concentration",274.402491983132,"ppbv N2O"
-"Unnamed Hector core",1812,"N2O_concentration",274.371951192873,"ppbv N2O"
-"Unnamed Hector core",1813,"N2O_concentration",274.33441103716,"ppbv N2O"
-"Unnamed Hector core",1814,"N2O_concentration",274.297872082147,"ppbv N2O"
-"Unnamed Hector core",1815,"N2O_concentration",274.247342493467,"ppbv N2O"
-"Unnamed Hector core",1816,"N2O_concentration",274.208815638471,"ppbv N2O"
-"Unnamed Hector core",1817,"N2O_concentration",274.172297082257,"ppbv N2O"
-"Unnamed Hector core",1818,"N2O_concentration",274.135772391177,"ppbv N2O"
-"Unnamed Hector core",1819,"N2O_concentration",274.114256332045,"ppbv N2O"
-"Unnamed Hector core",1820,"N2O_concentration",274.070746370538,"ppbv N2O"
-"Unnamed Hector core",1821,"N2O_concentration",274.033239576062,"ppbv N2O"
-"Unnamed Hector core",1822,"N2O_concentration",273.995739515652,"ppbv N2O"
-"Unnamed Hector core",1823,"N2O_concentration",273.957238757163,"ppbv N2O"
-"Unnamed Hector core",1824,"N2O_concentration",273.908742468797,"ppbv N2O"
-"Unnamed Hector core",1825,"N2O_concentration",273.847249619815,"ppbv N2O"
-"Unnamed Hector core",1826,"N2O_concentration",273.788766679968,"ppbv N2O"
-"Unnamed Hector core",1827,"N2O_concentration",273.73728891781,"ppbv N2O"
-"Unnamed Hector core",1828,"N2O_concentration",273.700806601802,"ppbv N2O"
-"Unnamed Hector core",1829,"N2O_concentration",273.661332399978,"ppbv N2O"
-"Unnamed Hector core",1830,"N2O_concentration",273.622858882206,"ppbv N2O"
-"Unnamed Hector core",1831,"N2O_concentration",273.57838981825,"ppbv N2O"
-"Unnamed Hector core",1832,"N2O_concentration",273.501924378707,"ppbv N2O"
-"Unnamed Hector core",1833,"N2O_concentration",273.429465436586,"ppbv N2O"
-"Unnamed Hector core",1834,"N2O_concentration",273.271009062044,"ppbv N2O"
-"Unnamed Hector core",1835,"N2O_concentration",273.135556432942,"ppbv N2O"
-"Unnamed Hector core",1836,"N2O_concentration",273.010109518191,"ppbv N2O"
-"Unnamed Hector core",1837,"N2O_concentration",272.928664988055,"ppbv N2O"
-"Unnamed Hector core",1838,"N2O_concentration",272.9212189103,"ppbv N2O"
-"Unnamed Hector core",1839,"N2O_concentration",272.912779450621,"ppbv N2O"
-"Unnamed Hector core",1840,"N2O_concentration",272.853346081108,"ppbv N2O"
-"Unnamed Hector core",1841,"N2O_concentration",272.742911178028,"ppbv N2O"
-"Unnamed Hector core",1842,"N2O_concentration",272.635488117744,"ppbv N2O"
-"Unnamed Hector core",1843,"N2O_concentration",272.660057072507,"ppbv N2O"
-"Unnamed Hector core",1844,"N2O_concentration",272.700641004819,"ppbv N2O"
-"Unnamed Hector core",1845,"N2O_concentration",272.692219586624,"ppbv N2O"
-"Unnamed Hector core",1846,"N2O_concentration",272.781800995061,"ppbv N2O"
-"Unnamed Hector core",1847,"N2O_concentration",272.86439469627,"ppbv N2O"
-"Unnamed Hector core",1848,"N2O_concentration",272.935982364695,"ppbv N2O"
-"Unnamed Hector core",1849,"N2O_concentration",273.004574975272,"ppbv N2O"
-"Unnamed Hector core",1850,"N2O_concentration",273.071174502521,"ppbv N2O"
-"Unnamed Hector core",1851,"N2O_concentration",273.143778921086,"ppbv N2O"
-"Unnamed Hector core",1852,"N2O_concentration",273.217383405232,"ppbv N2O"
-"Unnamed Hector core",1853,"N2O_concentration",273.312991729793,"ppbv N2O"
-"Unnamed Hector core",1854,"N2O_concentration",273.411601468313,"ppbv N2O"
-"Unnamed Hector core",1855,"N2O_concentration",273.518214995922,"ppbv N2O"
-"Unnamed Hector core",1856,"N2O_concentration",273.625828587604,"ppbv N2O"
-"Unnamed Hector core",1857,"N2O_concentration",273.722451119039,"ppbv N2O"
-"Unnamed Hector core",1858,"N2O_concentration",273.80307536693,"ppbv N2O"
-"Unnamed Hector core",1859,"N2O_concentration",273.941701208484,"ppbv N2O"
-"Unnamed Hector core",1860,"N2O_concentration",274.102328216049,"ppbv N2O"
-"Unnamed Hector core",1861,"N2O_concentration",274.285958164708,"ppbv N2O"
-"Unnamed Hector core",1862,"N2O_concentration",274.461595429712,"ppbv N2O"
-"Unnamed Hector core",1863,"N2O_concentration",274.616229288592,"ppbv N2O"
-"Unnamed Hector core",1864,"N2O_concentration",274.764877019894,"ppbv N2O"
-"Unnamed Hector core",1865,"N2O_concentration",274.924511301323,"ppbv N2O"
-"Unnamed Hector core",1866,"N2O_concentration",275.092161909654,"ppbv N2O"
-"Unnamed Hector core",1867,"N2O_concentration",275.256811822056,"ppbv N2O"
-"Unnamed Hector core",1868,"N2O_concentration",275.434459916587,"ppbv N2O"
-"Unnamed Hector core",1869,"N2O_concentration",275.604117770467,"ppbv N2O"
-"Unnamed Hector core",1870,"N2O_concentration",275.762771662422,"ppbv N2O"
-"Unnamed Hector core",1871,"N2O_concentration",275.94543287152,"ppbv N2O"
-"Unnamed Hector core",1872,"N2O_concentration",276.120093474834,"ppbv N2O"
-"Unnamed Hector core",1873,"N2O_concentration",276.291763551594,"ppbv N2O"
-"Unnamed Hector core",1874,"N2O_concentration",276.457437080883,"ppbv N2O"
-"Unnamed Hector core",1875,"N2O_concentration",276.626101342118,"ppbv N2O"
-"Unnamed Hector core",1876,"N2O_concentration",276.775778714342,"ppbv N2O"
-"Unnamed Hector core",1877,"N2O_concentration",276.904452378052,"ppbv N2O"
-"Unnamed Hector core",1878,"N2O_concentration",277.042126213987,"ppbv N2O"
-"Unnamed Hector core",1879,"N2O_concentration",277.17281150128,"ppbv N2O"
-"Unnamed Hector core",1880,"N2O_concentration",277.304496320154,"ppbv N2O"
-"Unnamed Hector core",1881,"N2O_concentration",277.413173250526,"ppbv N2O"
-"Unnamed Hector core",1882,"N2O_concentration",277.524871473821,"ppbv N2O"
-"Unnamed Hector core",1883,"N2O_concentration",277.629560770126,"ppbv N2O"
-"Unnamed Hector core",1884,"N2O_concentration",277.733255620247,"ppbv N2O"
-"Unnamed Hector core",1885,"N2O_concentration",277.8329499048,"ppbv N2O"
-"Unnamed Hector core",1886,"N2O_concentration",277.922647104718,"ppbv N2O"
-"Unnamed Hector core",1887,"N2O_concentration",278.032345901399,"ppbv N2O"
-"Unnamed Hector core",1888,"N2O_concentration",278.117053174777,"ppbv N2O"
-"Unnamed Hector core",1889,"N2O_concentration",278.22775610735,"ppbv N2O"
-"Unnamed Hector core",1890,"N2O_concentration",278.309467079047,"ppbv N2O"
-"Unnamed Hector core",1891,"N2O_concentration",278.38317727285,"ppbv N2O"
-"Unnamed Hector core",1892,"N2O_concentration",278.477883270756,"ppbv N2O"
-"Unnamed Hector core",1893,"N2O_concentration",278.58960255341,"ppbv N2O"
-"Unnamed Hector core",1894,"N2O_concentration",278.724319101836,"ppbv N2O"
-"Unnamed Hector core",1895,"N2O_concentration",278.866039096931,"ppbv N2O"
-"Unnamed Hector core",1896,"N2O_concentration",278.973762220569,"ppbv N2O"
-"Unnamed Hector core",1897,"N2O_concentration",279.085480256808,"ppbv N2O"
-"Unnamed Hector core",1898,"N2O_concentration",279.197208187924,"ppbv N2O"
-"Unnamed Hector core",1899,"N2O_concentration",279.341935396529,"ppbv N2O"
-"Unnamed Hector core",1900,"N2O_concentration",279.487666763782,"ppbv N2O"
-"Unnamed Hector core",1901,"N2O_concentration",279.646398172562,"ppbv N2O"
-"Unnamed Hector core",1902,"N2O_concentration",279.894136205315,"ppbv N2O"
-"Unnamed Hector core",1903,"N2O_concentration",280.188863341062,"ppbv N2O"
-"Unnamed Hector core",1904,"N2O_concentration",280.464602861061,"ppbv N2O"
-"Unnamed Hector core",1905,"N2O_concentration",280.737346249827,"ppbv N2O"
-"Unnamed Hector core",1906,"N2O_concentration",281.012090491235,"ppbv N2O"
-"Unnamed Hector core",1907,"N2O_concentration",281.30783286906,"ppbv N2O"
-"Unnamed Hector core",1908,"N2O_concentration",281.642578766347,"ppbv N2O"
-"Unnamed Hector core",1909,"N2O_concentration",281.981329565499,"ppbv N2O"
-"Unnamed Hector core",1910,"N2O_concentration",282.345078750647,"ppbv N2O"
-"Unnamed Hector core",1911,"N2O_concentration",282.751829205132,"ppbv N2O"
-"Unnamed Hector core",1912,"N2O_concentration",283.049585511676,"ppbv N2O"
-"Unnamed Hector core",1913,"N2O_concentration",283.392339359716,"ppbv N2O"
-"Unnamed Hector core",1914,"N2O_concentration",283.746099332085,"ppbv N2O"
-"Unnamed Hector core",1915,"N2O_concentration",284.076861013234,"ppbv N2O"
-"Unnamed Hector core",1916,"N2O_concentration",284.341622789173,"ppbv N2O"
-"Unnamed Hector core",1917,"N2O_concentration",284.644391047774,"ppbv N2O"
-"Unnamed Hector core",1918,"N2O_concentration",284.834159572657,"ppbv N2O"
-"Unnamed Hector core",1919,"N2O_concentration",284.879930253761,"ppbv N2O"
-"Unnamed Hector core",1920,"N2O_concentration",284.957692882238,"ppbv N2O"
-"Unnamed Hector core",1921,"N2O_concentration",285.067462642111,"ppbv N2O"
-"Unnamed Hector core",1922,"N2O_concentration",285.198242917562,"ppbv N2O"
-"Unnamed Hector core",1923,"N2O_concentration",285.495010193364,"ppbv N2O"
-"Unnamed Hector core",1924,"N2O_concentration",285.632795348768,"ppbv N2O"
-"Unnamed Hector core",1925,"N2O_concentration",285.679576375941,"ppbv N2O"
-"Unnamed Hector core",1926,"N2O_concentration",285.719352764341,"ppbv N2O"
-"Unnamed Hector core",1927,"N2O_concentration",285.767139300225,"ppbv N2O"
-"Unnamed Hector core",1928,"N2O_concentration",285.859920569385,"ppbv N2O"
-"Unnamed Hector core",1929,"N2O_concentration",285.917710056348,"ppbv N2O"
-"Unnamed Hector core",1930,"N2O_concentration",285.964497248776,"ppbv N2O"
-"Unnamed Hector core",1931,"N2O_concentration",286.150278333515,"ppbv N2O"
-"Unnamed Hector core",1932,"N2O_concentration",286.248073792022,"ppbv N2O"
-"Unnamed Hector core",1933,"N2O_concentration",286.396868414255,"ppbv N2O"
-"Unnamed Hector core",1934,"N2O_concentration",286.492660685174,"ppbv N2O"
-"Unnamed Hector core",1935,"N2O_concentration",286.612456693615,"ppbv N2O"
-"Unnamed Hector core",1936,"N2O_concentration",286.772250225728,"ppbv N2O"
-"Unnamed Hector core",1937,"N2O_concentration",286.976049067237,"ppbv N2O"
-"Unnamed Hector core",1938,"N2O_concentration",287.215847603874,"ppbv N2O"
-"Unnamed Hector core",1939,"N2O_concentration",287.411654021801,"ppbv N2O"
-"Unnamed Hector core",1940,"N2O_concentration",287.643452410048,"ppbv N2O"
-"Unnamed Hector core",1941,"N2O_concentration",287.888263054988,"ppbv N2O"
-"Unnamed Hector core",1942,"N2O_concentration",288.162077143903,"ppbv N2O"
-"Unnamed Hector core",1943,"N2O_concentration",288.804860363655,"ppbv N2O"
-"Unnamed Hector core",1944,"N2O_concentration",289.02369249004,"ppbv N2O"
-"Unnamed Hector core",1945,"N2O_concentration",289.250493625246,"ppbv N2O"
-"Unnamed Hector core",1946,"N2O_concentration",289.4503111571,"ppbv N2O"
-"Unnamed Hector core",1947,"N2O_concentration",289.534125174653,"ppbv N2O"
-"Unnamed Hector core",1948,"N2O_concentration",289.578949469849,"ppbv N2O"
-"Unnamed Hector core",1949,"N2O_concentration",289.620764032174,"ppbv N2O"
-"Unnamed Hector core",1950,"N2O_concentration",289.761574050042,"ppbv N2O"
-"Unnamed Hector core",1951,"N2O_concentration",289.882406708792,"ppbv N2O"
-"Unnamed Hector core",1952,"N2O_concentration",290.047226797617,"ppbv N2O"
-"Unnamed Hector core",1953,"N2O_concentration",290.35603780383,"ppbv N2O"
-"Unnamed Hector core",1954,"N2O_concentration",290.569871911852,"ppbv N2O"
-"Unnamed Hector core",1955,"N2O_concentration",290.865692913506,"ppbv N2O"
-"Unnamed Hector core",1956,"N2O_concentration",291.208519995345,"ppbv N2O"
-"Unnamed Hector core",1957,"N2O_concentration",291.533345545123,"ppbv N2O"
-"Unnamed Hector core",1958,"N2O_concentration",291.793180252624,"ppbv N2O"
-"Unnamed Hector core",1959,"N2O_concentration",292.008007909053,"ppbv N2O"
-"Unnamed Hector core",1960,"N2O_concentration",292.303843405062,"ppbv N2O"
-"Unnamed Hector core",1961,"N2O_concentration",292.622677627764,"ppbv N2O"
-"Unnamed Hector core",1962,"N2O_concentration",292.965505066067,"ppbv N2O"
-"Unnamed Hector core",1963,"N2O_concentration",293.347353208956,"ppbv N2O"
-"Unnamed Hector core",1964,"N2O_concentration",293.705190245103,"ppbv N2O"
-"Unnamed Hector core",1965,"N2O_concentration",294.065019965026,"ppbv N2O"
-"Unnamed Hector core",1966,"N2O_concentration",294.472865158591,"ppbv N2O"
-"Unnamed Hector core",1967,"N2O_concentration",294.879709714508,"ppbv N2O"
-"Unnamed Hector core",1968,"N2O_concentration",295.288551822917,"ppbv N2O"
-"Unnamed Hector core",1969,"N2O_concentration",295.700393573953,"ppbv N2O"
-"Unnamed Hector core",1970,"N2O_concentration",296.117233757802,"ppbv N2O"
-"Unnamed Hector core",1971,"N2O_concentration",296.541086664678,"ppbv N2O"
-"Unnamed Hector core",1972,"N2O_concentration",296.973930684823,"ppbv N2O"
-"Unnamed Hector core",1973,"N2O_concentration",297.417780008506,"ppbv N2O"
-"Unnamed Hector core",1974,"N2O_concentration",297.873631626031,"ppbv N2O"
-"Unnamed Hector core",1975,"N2O_concentration",298.344486327757,"ppbv N2O"
-"Unnamed Hector core",1976,"N2O_concentration",298.832338004055,"ppbv N2O"
-"Unnamed Hector core",1977,"N2O_concentration",299.337183945327,"ppbv N2O"
-"Unnamed Hector core",1978,"N2O_concentration",299.863042542067,"ppbv N2O"
-"Unnamed Hector core",1979,"N2O_concentration",300.410897684752,"ppbv N2O"
-"Unnamed Hector core",1980,"N2O_concentration",300.982756163928,"ppbv N2O"
-"Unnamed Hector core",1981,"N2O_concentration",301.579609570178,"ppbv N2O"
-"Unnamed Hector core",1982,"N2O_concentration",302.204476694154,"ppbv N2O"
-"Unnamed Hector core",1983,"N2O_concentration",302.859336126524,"ppbv N2O"
-"Unnamed Hector core",1984,"N2O_concentration",303.545194858004,"ppbv N2O"
-"Unnamed Hector core",1985,"N2O_concentration",304.264059479375,"ppbv N2O"
-"Unnamed Hector core",1986,"N2O_concentration",305.018920581469,"ppbv N2O"
-"Unnamed Hector core",1987,"N2O_concentration",305.80978345514,"ppbv N2O"
-"Unnamed Hector core",1988,"N2O_concentration",306.640658391337,"ppbv N2O"
-"Unnamed Hector core",1989,"N2O_concentration",307.847505881016,"ppbv N2O"
-"Unnamed Hector core",1990,"N2O_concentration",308.699386608027,"ppbv N2O"
-"Unnamed Hector core",1991,"N2O_concentration",309.2492562721,"ppbv N2O"
-"Unnamed Hector core",1992,"N2O_concentration",309.741128371609,"ppbv N2O"
-"Unnamed Hector core",1993,"N2O_concentration",310.115012799678,"ppbv N2O"
-"Unnamed Hector core",1994,"N2O_concentration",310.823861850684,"ppbv N2O"
-"Unnamed Hector core",1995,"N2O_concentration",311.29476120974,"ppbv N2O"
-"Unnamed Hector core",1996,"N2O_concentration",312.313599573843,"ppbv N2O"
-"Unnamed Hector core",1997,"N2O_concentration",313.198487124161,"ppbv N2O"
-"Unnamed Hector core",1998,"N2O_concentration",313.922336955834,"ppbv N2O"
-"Unnamed Hector core",1999,"N2O_concentration",314.72419836448,"ppbv N2O"
-"Unnamed Hector core",2000,"N2O_concentration",315.774082141024,"ppbv N2O"
-"Unnamed Hector core",2001,"N2O_concentration",316.50798277325,"ppbv N2O"
-"Unnamed Hector core",2002,"N2O_concentration",317.115864559874,"ppbv N2O"
-"Unnamed Hector core",2003,"N2O_concentration",317.744733195864,"ppbv N2O"
-"Unnamed Hector core",2004,"N2O_concentration",318.371626773429,"ppbv N2O"
-"Unnamed Hector core",2005,"N2O_concentration",319.144494485269,"ppbv N2O"
-"Unnamed Hector core",2006,"N2O_concentration",319.947374721445,"ppbv N2O"
-"Unnamed Hector core",2007,"N2O_concentration",320.660274674268,"ppbv N2O"
-"Unnamed Hector core",2008,"N2O_concentration",321.58913833826,"ppbv N2O"
-"Unnamed Hector core",2009,"N2O_concentration",322.289039602537,"ppbv N2O"
-"Unnamed Hector core",2010,"N2O_concentration",323.154914264185,"ppbv N2O"
-"Unnamed Hector core",2011,"N2O_concentration",324.172792713361,"ppbv N2O"
-"Unnamed Hector core",2012,"N2O_concentration",325.018690240628,"ppbv N2O"
-"Unnamed Hector core",2013,"N2O_concentration",325.932579242181,"ppbv N2O"
-"Unnamed Hector core",2014,"N2O_concentration",327.001470410135,"ppbv N2O"
-"Unnamed Hector core",2015,"N2O_concentration",328.192964335259,"ppbv N2O"
+"Date","N2O_natural_emissions"
+1746,10.048509848321
+1747,9.98252977879451
+1748,9.9735727466405
+1749,9.97891818395473
+1750,10.0563721467598
+1751,10.0421554646309
+1752,10.0613864272893
+1753,10.1239745141636
+1754,10.1101839892847
+1755,10.0723562396003
+1756,10.0389994606702
+1757,9.98607940800995
+1758,10.0623196232365
+1759,10.0768068238172
+1760,10.0385784336729
+1761,10.0431731417904
+1762,10.0382000169857
+1763,10.1532212691979
+1764,10.0866263919372
+1765,10.0579492887595
+1766,10.0002331774449
+1767,10.0667765833298
+1768,10.0042385884206
+1769,10.0036280885321
+1770,10.0317261919231
+1771,9.98807714680207
+1772,9.98720724673912
+1773,9.97675092036076
+1774,9.9853413464471
+1775,9.9652301758579
+1776,9.96892285792402
+1777,9.95340916358221
+1778,9.95214044839687
+1779,9.94606660392668
+1780,9.93990920873179
+1781,9.9288464192965
+1782,9.92253082687055
+1783,9.90652363145827
+1784,9.91436541136188
+1785,9.90779362233549
+1786,9.91563658975813
+1787,9.88982697770395
+1788,9.87346787281426
+1789,9.88094292346825
+1790,9.86921534957021
+1791,9.8573591772241
+1792,9.86944506782266
+1793,9.7952022148226
+1794,9.81150596004414
+1795,9.77989659269905
+1796,9.78166707769892
+1797,9.7882046337333
+1798,9.77077230316182
+1799,9.78196339836674
+1800,9.73567659306125
+1801,9.77055238244712
+1802,9.79608905815805
+1803,9.74980790495145
+1804,9.74152127786502
+1805,9.73315665373012
+1806,9.73433089904636
+1807,9.73060681627956
+1808,9.73651829334738
+1809,9.67999929675613
+1810,9.6997596231707
+1811,9.68134608598285
+1812,9.65792372341749
+1813,9.6198596613225
+1814,9.619868689948
+1815,9.54789161506208
+1816,9.60008374646307
+1817,9.60469496014203
+1818,9.59964637735516
+1819,9.66659997230536
+1820,9.55644472041912
+1821,9.57976451427259
+1822,9.57445822761163
+1823,9.56424273158283
+1824,9.51073864664148
+1825,9.442371356927
+1826,9.45026084256811
+1827,9.47736302569586
+1828,9.54300494405477
+1829,9.52279764837925
+1830,9.52155633304034
+1831,9.48668560563739
+1832,9.32669465764799
+1833,9.33820691968327
+1834,8.91776264926209
+1835,9.0171484775274
+1836,9.054928005009
+1837,9.25617774293231
+1838,9.60299078922763
+1839,9.5925683953382
+1840,9.3420040953787
+1841,9.08935314773731
+1842,9.0939141744534
+1843,9.71758777494857
+1844,9.78950085978271
+1845,9.54981632041781
+1846,10.0137868192304
+1847,9.97742825168735
+1848,9.92139718816783
+1849,9.90327863205611
+1850,9.88973291979905
+1851,9.91311847528661
+1852,9.91205978934552
+1853,10.0128027372222
+1854,10.0228512913732
+1855,10.0579973358127
+1856,10.0608093554198
+1857,10.0058483511851
+1858,9.92775441613195
+1859,10.204760433808
+1860,10.3119038496414
+1861,10.4258438862535
+1862,10.3918822097021
+1863,10.2953083386733
+1864,10.2698983353779
+1865,10.3258856896723
+1866,10.3681542647009
+1867,10.3576875839886
+1868,10.4231433780527
+1869,10.3891009628605
+1870,10.3400300409223
+1871,10.453628883544
+1872,10.4056761425391
+1873,10.3749614698648
+1874,10.3248939397386
+1875,10.315150247665
+1876,10.199736669358
+1877,10.0752932160106
+1878,10.0979179695628
+1879,10.0484241827517
+1880,10.0443636700526
+1881,9.93109791737601
+1882,9.94113325635149
+1883,9.90514116200152
+1884,9.89854983815346
+1885,9.8771086973125
+1886,9.82818999322333
+1887,9.92204106753297
+1888,9.80026579897266
+1889,9.92174182867246
+1890,9.76191310929002
+1891,9.7152972823575
+1892,9.80761735261934
+1893,9.88144279878877
+1894,9.98382410876804
+1895,10.0117058379728
+1896,9.84272158156947
+1897,9.85547971700351
+1898,9.85012860375501
+1899,10.0033171296773
+1900,10.004282148207
+1901,10.0640159103924
+1902,10.4875051134637
+1903,10.7130766958624
+1904,10.6228639656315
+1905,10.6082249666525
+1906,10.61718798993
+1907,10.7177898243881
+1908,10.9058924143729
+1909,10.9277461196527
+1910,11.0499701780887
+1911,11.2589811098872
+1912,10.7351155923315
+1913,10.9434713583191
+1914,10.9887202905956
+1915,10.8693691474676
+1916,10.54204964428
+1917,10.7121443641115
+1918,10.1603568061091
+1919,9.45742020829864
+1920,9.5953323169035
+1921,9.73615762349564
+1922,9.8258459858441
+1923,10.6112454825487
+1924,9.84238763642347
+1925,9.39526765965357
+1926,9.34861434026537
+1927,9.37443181954359
+1928,9.57921519096707
+1929,9.40376226593363
+1930,9.34361973035886
+1931,10.0056328533051
+1932,9.58362260587678
+1933,9.82648939548137
+1934,9.57148681132246
+1935,9.68398114242182
+1936,9.87431599114502
+1937,10.0838212942023
+1938,10.255817987082
+1939,10.0421308829183
+1940,10.2096264855416
+1941,10.2334833943004
+1942,10.2793150321679
+1943,11.9128732940709
+1944,9.72656376217784
+1945,9.58010015675753
+1946,9.26386347650847
+1947,8.52827771145762
+1948,8.18334571349862
+1949,8.04624615664709
+1950,8.45021553861301
+1951,8.31574687595196
+1952,8.48883665102077
+1953,9.141300182608
+1954,8.65040422452506
+1955,9.00143100036384
+1956,9.18669997250574
+1957,9.0583494254884
+1958,8.69741190171154
+1959,8.42519598173318
+1960,8.74865641646404
+1961,8.64893519558572
+1962,8.64290879117875
+1963,8.71834873655813
+1964,8.47574678934517
+1965,8.32958099936153
+1966,8.37784067538307
+1967,8.21808564327307
+1968,8.10674288650106
+1969,8.0224942098308
+1970,8.0806964346143
+1971,8.18100319459623
+1972,7.97318784158337
+1973,7.92252250985734
+1974,8.01355690856248
+1975,7.93065591483757
+1976,7.88474694550353
+1977,7.83792503799743
+1978,7.83248969117665
+1979,7.77628079495083
+1980,7.84663367172054
+1981,8.05609778377259
+1982,7.9758062469331
+1983,8.12097303163249
+1984,8.36435625309444
+1985,8.54892714473286
+1986,8.62266130850377
+1987,8.59741092249048
+1988,8.9817490953643
+1989,10.7420995722083
+1990,9.07198186889294
+1991,7.58725483091156
+1992,7.31645768475879
+1993,6.81673703948909
+1994,8.30785639236918
+1995,7.13068415536373
+1996,9.74074203979019
+1997,8.93869642810235
+1998,8.49366155608833
+1999,9.06131339976503
+2000,10.4515699123797
+2001,8.89944094345343
+2002,8.15122690740647
+2003,8.20659440863445
+2004,8.05913859887546
+2005,8.68082063172491
+2006,8.67258757140461
+2007,8.55104057031013
+2008,9.5729651833581
+2009,8.43518817933878
+2010,9.26320851546727
+2011,10.0855997584859
+2012,9.20542054402324
+2013,9.45923909511552
+2014,10.1701920298036
+2015,10.7783976946899
+2016,9.35342393118269
+2016,9.35224179761109
+2017,9.35224179761109
+2018,9.35224179761109
+2019,9.35224179761109
+2020,9.35224179761109
+2021,9.35224179761109
+2022,9.35224179761109
+2023,9.35224179761109
+2024,9.35224179761109
+2025,9.35224179761109
+2026,9.35224179761109
+2027,9.35224179761109
+2028,9.35224179761109
+2029,9.35224179761109
+2030,9.35224179761109
+2031,9.35224179761109
+2032,9.35224179761109
+2033,9.35224179761109
+2034,9.35224179761109
+2035,9.35224179761109
+2036,9.35224179761109
+2037,9.35224179761109
+2038,9.35224179761109
+2039,9.35224179761109
+2040,9.35224179761109
+2041,9.35224179761109
+2042,9.35224179761109
+2043,9.35224179761109
+2044,9.35224179761109
+2045,9.35224179761109
+2046,9.35224179761109
+2047,9.35224179761109
+2048,9.35224179761109
+2049,9.35224179761109
+2050,9.35224179761109
+2051,9.35224179761109
+2052,9.35224179761109
+2053,9.35224179761109
+2054,9.35224179761109
+2055,9.35224179761109
+2056,9.35224179761109
+2057,9.35224179761109
+2058,9.35224179761109
+2059,9.35224179761109
+2060,9.35224179761109
+2061,9.35224179761109
+2062,9.35224179761109
+2063,9.35224179761109
+2064,9.35224179761109
+2065,9.35224179761109
+2066,9.35224179761109
+2067,9.35224179761109
+2068,9.35224179761109
+2069,9.35224179761109
+2070,9.35224179761109
+2071,9.35224179761109
+2072,9.35224179761109
+2073,9.35224179761109
+2074,9.35224179761109
+2075,9.35224179761109
+2076,9.35224179761109
+2077,9.35224179761109
+2078,9.35224179761109
+2079,9.35224179761109
+2080,9.35224179761109
+2081,9.35224179761109
+2082,9.35224179761109
+2083,9.35224179761109
+2084,9.35224179761109
+2085,9.35224179761109
+2086,9.35224179761109
+2087,9.35224179761109
+2088,9.35224179761109
+2089,9.35224179761109
+2090,9.35224179761109
+2091,9.35224179761109
+2092,9.35224179761109
+2093,9.35224179761109
+2094,9.35224179761109
+2095,9.35224179761109
+2096,9.35224179761109
+2097,9.35224179761109
+2098,9.35224179761109
+2099,9.35224179761109
+2100,9.35224179761109

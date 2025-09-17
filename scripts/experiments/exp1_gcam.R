@@ -79,25 +79,15 @@ write.csv(hector_rslts_full,
           file = file.path("data", "experiments", "exp1_hector.csv"),
           row.names = FALSE)
 
+source <- "exp1"
 
-
-# Run all of the SSP scenarios to see what happens in the future!
-
-
+# the ssp values
 system.file(package = "hector", "input") %>%
-    list.files(pattern = "ssp")
+    list.files(pattern = "ssp", full.names = TRUE) ->
+    ALL_SSPS
+out <- batch_ssp_run(inis = ALL_SSPS, params = params_to_use, source = source)
+write.csv(out, "data/experiments/hector_exp1_ssps.csv", row.names = FALSE)
 
-
-
-
-
-
-
-# ggplot() +
-#     geom_line(data = hector_rslts_full, aes(year, value, color = "new")) +
-#     geom_line(data = comparison_data, aes(year, value, color = "comp")) +
-#     facet_wrap("variable", scales = "free", ncol = 1)
-#
 
 
 

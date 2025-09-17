@@ -108,3 +108,14 @@ hector_rslts %>%
 write.csv(hector_rslts_full,
           file = file.path("data", "experiments", "exp2_hector.csv"),
           row.names = FALSE)
+
+
+source <- "exp2"
+
+# the ssp values
+system.file(package = "hector", "input") %>%
+    list.files(pattern = "ssp", full.names = TRUE) ->
+    ALL_SSPS
+out <- batch_ssp_run(inis = ALL_SSPS, params = params_to_use, source = source)
+write.csv(out, "data/experiments/hector_exp2_ssps.csv", row.names = FALSE)
+
