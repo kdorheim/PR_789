@@ -10,7 +10,7 @@ library(paletteer)
 
 # Plotting aesthetics
 theme_set(theme_bw())
-JW <- 0
+JW <- 0.15
 
 # 1. Load Data -----------------------------------------------------------------
 
@@ -18,6 +18,10 @@ JW <- 0
 here::here("data", "ar6.csv") %>%
     read.csv ->
     ar6_data
+
+here::here("data", "ar6_scms.csv") %>%
+    read.csv ->
+    ar6_scms_data
 
 here::here("data", "default_v32.csv") %>%
     read.csv ->
@@ -83,6 +87,11 @@ ar6_data %>%
            units == "degC rel. 1995-2014") ->
     ar6_future_warming
 
+ar6_scms_data%>%
+    filter(variable == "global_tas",
+           units == "degC rel. 1995-2014") ->
+    ar6_scms_future_warming
+
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
 hector_old %>%
     filter(variable == "global_tas",
@@ -99,6 +108,8 @@ ggplot() +
                   aes(year, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_future_warming, aes(year, value, color = "ar6"), shape = 4) +
+    geom_point(data = ar6_scms_future_warming, aes(year, value, color = "scms"),
+               shape = 4, position = position_jitter(height = 0, width = JW)) +
     geom_point(data = old_future_warming, aes(year, value, color = "old hector"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_future_warming, aes(year, value, color = source),
@@ -120,11 +131,14 @@ ar6_data %>%
     filter(variable %in% vars) ->
     ar6_key_metrics
 
+ar6_scms_data %>%
+    filter(variable %in% vars) ->
+    ar6_key_scms_metrics
+
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
 hector_old %>%
     filter(variable %in% vars) ->
     old_key_metrics
-
 
 new %>%
     filter(variable %in% vars) ->
@@ -136,6 +150,8 @@ ggplot() +
                   aes(variable, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_key_metrics, aes(variable, value, color = "ar6"), shape = 4) +
+    geom_point(data = ar6_key_scms_metrics, aes(variable, value, color = "scms"),
+               shape = 4, position = position_jitter(height = 0, width = JW)) +
     geom_point(data = old_key_metrics, aes(variable, value, color = "old hector"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_key_metrics, aes(variable, value, color = source),
@@ -156,6 +172,11 @@ ar6_data %>%
     filter(variable %in% vars) ->
     ar6_hist
 
+ar6_scms_data %>%
+    filter(variable %in% vars) ->
+    ar6_scms_hist
+
+
 # Get the V3.2 values, that were included in Dorheim et al 2024 paper.
 hector_old %>%
     filter(variable %in% vars) ->
@@ -174,6 +195,8 @@ ggplot() +
                   aes(variable, ymin = min, ymax = max),
                   width=.2, alpha = 0.5) +
     geom_point(data = ar6_hist, aes(variable, value, color = "ar6"), shape = 4) +
+    geom_point(data = ar6_scms_hist, aes(variable, value, color = "scms"),
+               shape = 4,  position = position_jitter(height = 0, width = JW)) +
     geom_point(data = old_hist, aes(variable, value, color = "old hector"),
                position = position_jitter(height = 0, width = JW)) +
     geom_point(data = new_hist, aes(variable, value, color = source),

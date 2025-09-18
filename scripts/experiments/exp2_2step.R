@@ -1,5 +1,5 @@
 # Exploring Hector Calibration Protocol
-# This is the same prtocol that is used for calibrating hector for GCAM.
+# This is the same protocol that is used for calibrating hector for GCAM.
 
 
 # 0. Set Up --------------------------------------------------------------------

@@ -4,14 +4,26 @@
 # 0. Set Up -----------------------------------------------------------------
 source("scripts/fxns_calibration.R")
 
-## Load Hector Results
+# 1. Data -------------------------------------------------------------------
 
+## Load Hector Results
 "data/GMD_2024/" %>%
     list.files(pattern = "hector_3.2.0_ssp.csv", full.names = TRUE) %>%
     lapply(read.csv) %>%
     do.call(what = "rbind") %>%
-    filter(year <= 2100) ->
+    filter(year <= 2100) %>%
+    mutate(source = "v3.2") ->
+    hector_ssp_gmd
+
+#TODO left off here
+list("data/experiments/hector_exp1_ssps.csv",
+     "data/experiments/hector_exp2_ssps.csv",
+     "data/hector_v349_ssps.csv") %>%
+    lapply(read.csv) %>%
+    bind_rows %>%
+    bind_rows(hector_ssp_gmd) ->
     hector_ssp
+
 
 "data/GMD_2024/" %>%
 list.files(pattern = "hector_3.2.0_ssp-conc.csv", full.names = TRUE) %>%
@@ -22,9 +34,22 @@ list.files(pattern = "hector_3.2.0_ssp-conc.csv", full.names = TRUE) %>%
 
 
 
+## 1D. Colors -------------------------------------------------------------------
+
+# have each scenario or experiment correspond to a unique color code
+num <- length(unique(hector_ssp$source))
+show_col(hue_pal()(num))
+selected_colors <- hue_pal()(num)
+
+COLORS <- selected_colors
+names(COLORS) <- unique(hector_ssp$source)
+COLORS <- c(COLORS, "obs" = "black", "CMIP6 ESM" = "grey")
+
+
+# 2. Obs. vs Hector Plots  -----------------------------------------------------
+
 
 # Comparison with Observations
-
 ## Atmospheric CO~2~
 
 # Meinshausen, M., Vogel, E., Nauels, A., Lorbacher, K., Meinshausen, N., Etheridge, D. M.,
@@ -52,24 +77,36 @@ cmip6_co2_obs %>%
     filter(year <= 1800) ->
     inital_obs
 
-
 cmip6_co2_obs %>%
     filter(year >= 1800) ->
     cmip6_co2_obs
 
 ggplot() +
-    geom_point(data = inital_obs, aes(year, value, color = "Meinshausen et al 2017")) +
-    geom_line(data = cmip6_co2_obs, aes(year, value, color = "Meinshausen et al 2017")) +
-    geom_line(data = hector_co2, aes(year, value, color = "Hector V3")) +
+    geom_line(data = cmip6_co2_obs, aes(year, value, color = "obs")) +
+    geom_line(data = hector_co2, aes(year, value, color = source)) +
     labs(x = "Year", y = expression('CO'[2]~' (ppm)')) +
-    theme(legend.position = "bottom") ->
+    theme(legend.position = "bottom") +
+    scale_color_manual(values = COLORS) ->
     plot; plot
+
+
+cmip6_co2_obs %>%
+    select(obs = value, year) %>%
+    left_join(hector_co2, by = join_by(year)) %>%
+    mutate(AE = abs(value - obs)) %>%
+    filter(!is.na(AE)) %>%
+    summarise(MAE = mean(AE), .by = source) %>%
+    ggplot() +
+    geom_bar(aes(source, MAE, fill = source),  stat = "identity") +
+    labs(title = "Mean Abolute Error",
+         subtitle = "Historical Hector vs. CO2 Obs") +
+    labs(x = NULL) +
+    theme(legend.position = "none") +
+    scale_fill_manual(values = COLORS)
 
 
 
 ## Global Mean Surface Temperature
-
-
 # Hadcrut5
 # Global mean surface temperature anomaly
 # https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/download.html
@@ -85,8 +122,6 @@ here::here("data/GMD_2024", "HadCRUT5.csv") %>%
     hadcrut_obs_data
 names(hadcrut_obs_data) <- c("year", "value", "lower", "upper")
 hadcrut_obs_data$variable <- "gmst"
-hadcrut_obs_data
-
 
 yrs <- hadcrut_obs_data$year
 
@@ -94,23 +129,39 @@ hector_ssp %>%
     filter(variable == "gmst") %>%
     filter(scenario == "ssp119") %>%
     filter(year %in% yrs) %>%
-    normalize_data_fxn(yrs = 1961:1990) %>%
-    na.omit ->
+    split(., .$source) %>%
+    lapply(FUN = normalize_data_fxn, yrs = 1961:1990) %>%
+    bind_rows %>%
+    filter(!is.na(value))->
     hector_gmst
 
 ggplot() +
     geom_ribbon(data = hadcrut_obs_data, aes(year, ymin = lower, ymax = upper), alpha = 0.2) +
-    geom_line(data = hadcrut_obs_data, aes(year, value, color = "Morice et al., 2021")) +
-    geom_line(data = hector_gmst, aes(year, value, color = "Hector V3"), linewidth = 0.75) +
+    geom_line(data = hadcrut_obs_data, aes(year, value, color = "obs")) +
+    geom_line(data = hector_gmst, aes(year, value, color = source), linewidth = 0.75) +
     labs(x = "Year", y = expression("Temperature anomaly ("~degree~"C)")) +
-    theme(legend.position = "bottom") ->
+    theme(legend.position = "bottom") +
+    scale_color_manual(values = COLORS) ->
     plot; plot
 
+hadcrut_obs_data %>%
+    select(obs = value, year) %>%
+    left_join(hector_gmst, by = join_by(year)) %>%
+    mutate(AE = abs(value - obs)) %>%
+    filter(!is.na(AE)) %>%
+    summarise(MAE = mean(AE), .by = source) %>%
+    ggplot() +
+    geom_bar(aes(source, MAE, fill = source),  stat = "identity") +
+    labs(title = "Mean Abolute Error",
+         subtitle = "Historical Hector vs. CO2 Obs") +
+    labs(x = NULL) +
+    theme(legend.position = "none") +
+    scale_fill_manual(values = COLORS)
 
+# 3. Hector vs. CMIP  -----------------------------------------------------
 
 
 # CMIP6 Comparison
-
 # Make a plot with the ESMs colored by their ECS labels.
 
 scns <- c("ssp245", "ssp126", "ssp585")
@@ -150,20 +201,35 @@ cmip6_ecs %>%
     mutate(id = ifelse(ecs >= 2 & ecs <= 5, "very likely", id)) ->
     ecs_table
 
+
+VARS <- c(GLOBAL_TAS(), LAND_TAS(), SST())
+
+
 read.csv(here::here("data/GMD_2024", "cmip6_model_means.csv")) %>%
     dplyr::filter(scenario %in% scns)  %>%
     filter(model %in% cmip6_ecs$model) %>%
+    filter(variable %in% VARS) %>%
     full_join(ecs_table, by = "model") ->
     cmip6_rslts
 
-hector_ssp_conc %>%
-    filter(year %in% 1850:2100) %>%
-    filter(variable %in% c(SST(), GLOBAL_TAS(),  LAND_TAS())) %>%
-    filter(scenario %in% cmip6_rslts$scenario) ->
-    hector_temp
+# hector_ssp_conc %>%
+#     filter(year %in% 1850:2100) %>%
+#     filter(variable %in% c(SST(), GLOBAL_TAS(),  LAND_TAS())) %>%
+#     filter(scenario %in% cmip6_rslts$scenario) ->
+#     hector_temp
+#
+# # Normalize the Hector temperatures to the CMIP6 reference period
+# split(hector_temp, interaction(hector_temp$variable, hector_temp$scenario), drop = TRUE) %>%
+#     lapply(FUN = normalize_data_fxn, yrs = 1850:1900) %>%
+#     do.call(what = "rbind") ->
+#     hector_temp
 
-# Normalize the Hector temperatures to the CMIP6 reference period
-split(hector_temp, interaction(hector_temp$variable, hector_temp$scenario), drop = TRUE) %>%
+
+hector_ssp %>%
+    filter(year %in% 1850:2100) %>%
+    filter(variable %in% VARS) %>%
+    filter(scenario %in% cmip6_rslts$scenario) %>%
+    split(., interaction(.$variable, .$scenario, .$source), drop = TRUE) %>%
     lapply(FUN = normalize_data_fxn, yrs = 1850:1900) %>%
     do.call(what = "rbind") ->
     hector_temp
@@ -171,16 +237,17 @@ split(hector_temp, interaction(hector_temp$variable, hector_temp$scenario), drop
 cmip6_rslts %>%
     group_by(scenario, year, variable, id) %>%
     summarise(min = min(value),
-              max = max(value)) ->
+              max = max(value)) %>%
+    filter(variable %in% VARS) ->
     cmip6_temp_summary
 
 # Create the labels
 temp_labs <- c("Global Mean Air Temp.", "Mean Land Surface Temp.", "Mean Sea Surface Temp.")
-names(temp_labs) <-   c(GLOBAL_TAS(), LAND_TAS(), SST())
+names(temp_labs) <-  c(GLOBAL_TAS(), LAND_TAS(), SST())
 
 ggplot() +
     geom_ribbon(data = cmip6_temp_summary, aes(year, ymin = min, ymax = max, fill = id), alpha = 0.9) +
-    geom_line(data = hector_temp, aes(year, value, color = "Hector V3"), size = 1) +
+    geom_line(data = hector_temp, aes(year, value, color = source), size = 1) +
     facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
     labs(y = expression("Temperature anomaly relative to 1850-1860 ("~degree~"C)"), x = "Year") +
     scale_fill_manual(values = c("very likely" = "#5A5A5A",
@@ -188,19 +255,22 @@ ggplot() +
     theme(panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_blank(),
           legend.position = "bottom") +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) ->
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+    scale_color_manual(values = COLORS) ->
     plot; plot
 
 
 ggplot() +
-    geom_line(data = cmip6_rslts, aes(year, value, group = interaction(model), color = "CMIP6 ESM"), alpha = 0.5) +
-    geom_line(data = hector_temp, aes(year, value, color = "Hector V3"),) +
+    geom_line(data = cmip6_rslts, aes(year, value, group = interaction(model),
+                                      color = "CMIP6 ESM"), alpha = 0.5) +
+    geom_line(data = hector_temp, aes(year, value, color = source), size = 1) +
     facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
     labs(y = expression("Temperature anomaly ("~degree~"C)"), x = "Years") +
     theme(panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_blank(),
           legend.position = "bottom") +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) ->
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+    scale_color_manual(values = COLORS) ->
     plot; plot
 
 

@@ -188,7 +188,8 @@ fetch_nonghg_rf <- function(hc, yrs){
 
     # non ghg RF
     aero_rf <- c(RF_BC(), RF_OC(), RF_NH3(), RF_SO2(), RF_ACI())
-    non_ghg_rf <- c(aero_rf, RF_VOL(), RF_ALBEDO(), RF_MISC())
+    non_wm <- c(RF_O3_TROP(), RF_H2O_STRAT())
+    non_ghg_rf <- c(aero_rf, non_wm, RF_VOL(), RF_ALBEDO(), RF_MISC())
 
     # Calculate the annual total rf
     fetchvars(hc, yrs, vars = non_ghg_rf) %>%
@@ -354,7 +355,7 @@ system.file(package = "hector", "input") %>%
 
 VARS <- c(GMST(), NPP(), VEG_C(), CONCENTRATIONS_CO2(),
           CONCENTRATIONS_CH4(), CONCENTRATIONS_N2O(),
-          HEAT_FLUX(), SST())
+          HEAT_FLUX(), SST(), GLOBAL_TAS(), LAND_TAS())
 
 # Helper function that runs a batch of ssps for some parameter combination
 # Args
