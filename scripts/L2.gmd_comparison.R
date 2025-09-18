@@ -308,4 +308,4 @@ ggplot() +
     scale_color_manual(values = COLORS) ->
     plot; plot
 
-ggsave(plot, filename = "figs/cmip6_idealized.png", height = 6, width = 6)
+ggsave(plot, filename = "figs/cmip6_idealized.png", height = 4, width = 6)
