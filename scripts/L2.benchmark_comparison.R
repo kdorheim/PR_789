@@ -8,6 +8,7 @@ library(ggplot2)
 library(ggthemes)
 library(paletteer)
 library(ggpmisc)
+library(scales)
 
 # Plotting aesthetics
 theme_set(theme_bw())
@@ -55,7 +56,6 @@ bind_rows(read.csv("data/hector_v32_ssps.csv"),
 
 # have each scenario or experiment correspond to a unique color code
 num <- length(unique(hector_benchmarks$source))
-show_col(hue_pal()(num))
 selected_colors <- hue_pal()(num)
 
 COLORS <- selected_colors
@@ -195,6 +195,19 @@ hector_v_obs_fxn <- function(hector_data, vars, SAVE = FALSE){
         filter(year %in% comp_to_plot$year) ->
         hector_to_plot
 
+    comp_to_plot %>%
+        select(year, variable, obs = value) %>%
+        left_join(hector_to_plot) %>%
+        summarise(MAE = mean(abs(obs - value)), .by = c(variable, scenario)) %>%
+        mutate(MAE = signif(MAE, digits = 3)) ->
+        MAE_table
+
+    tbs <- lapply(split(MAE_table, MAE_table$variable), "[")
+
+    df <- tibble(x = rep(Inf, length(tbs)),
+                 y = rep(-Inf, length(tbs)),
+                 variable = vars,
+                 tbl = tbs)
 
     ggplot() +
         geom_line(data = comp_to_plot, aes(year, value, color = "obs"), linewidth = 1, alpha = 0.25) +
@@ -202,7 +215,9 @@ hector_v_obs_fxn <- function(hector_data, vars, SAVE = FALSE){
         facet_wrap("variable", scales = "free") +
         labs(x = NULL, y = NULL) +
         theme(legend.position = "bottom", legend.title = element_blank()) +
-        scale_color_manual(values = COLORS_RSLTS) ->
+        scale_color_manual(values = COLORS) +
+        geom_table(data = df, aes(x = x, y = y, label = tbl),
+                   hjust = 1, vjust = 0) ->
         plot; plot
 
     return(plot)
@@ -216,6 +231,23 @@ hector_v_obs_fxn <- function(hector_data, vars, SAVE = FALSE){
     }
 
 }
+
+
+hector_v_obs_fxn(hector_rslts, vars = GMST()) ->
+    plot; plot
+
+ggsave(plot, filename = "figs/gmst_obs_v_hector.png", height = 6, width = 6)
+
+hector_v_obs_fxn(hector_rslts, vars = CONCENTRATIONS_CO2()) ->
+    plot; plot
+
+ggsave(plot, filename = "figs/co2_obs_v_hector.png", height = 6, width = 6)
+
+hector_v_obs_fxn(hector_rslts, vars = "OHC") ->
+    plot; plot
+
+ggsave(plot, filename = "figs/OHC_obs_v_hector.png", height = 6, width = 6)
+
 
 hector_rslts %>%
     select(scenario, year, variable, hector = value) %>%
