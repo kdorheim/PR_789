@@ -1,0 +1,99 @@
+# Exploring Hector Calibration Protocol
+# This is the same protocol that is used for calibrating hector for GCAM
+# but now set some constraints.
+
+
+# 0. Set Up --------------------------------------------------------------------
+source("scripts/fxns_calibration.R")
+source("scripts/fxns_benchmarking.R")
+
+# Flag to indicate if should run the calibration or load previous
+# fit parameter values.
+RUN <- TRUE
+
+# 1. Calibration ---------------------------------------------------------------
+
+if(RUN){
+    # All three variables free at once.
+    inital_guess <- c("diff" = 2.5, "beta" = 0.36, "q10_rh" = 2.1)
+
+    # Set up the hector core
+    ini <- system.file(package = "hector", "input/hector_ssp245.ini")
+    core <- newcore_CH4_N2O(ini, name = "contrs")
+
+
+    # Select the comparison data.
+    comparison_data %>%
+        filter(variable %in% c(CONCENTRATIONS_CO2(), GMST(), "OHC")) ->
+        comp_data
+
+    fxn  <- internal_fn(p = inital_guess,
+                        err_fn = obj_MSE,
+                        obs = comp_data,
+                        core = core)
+
+    fit1 <- optim(par = inital_guess,
+                  fn = fxn,
+                  lower = c(0.1, 0, 1),
+                  upper = c(10, 1, 3), method = "L-BFGS-B")
+
+    # Run Hector
+    params_to_use <- round(fit1$par, digits = 3)
+
+
+    write.csv(data.frame(t(params_to_use)), file = file.path("data", "experiments", "exp3_gcam-params.csv"), row.names = FALSE)
+
+} else {
+
+    # Load the previous parameter values.
+    file <- file.path("data", "experiments", "exp3_gcam-params.csv")
+    params_to_use <- read.csv(file)
+}
+
+# 2. Benchmark & Hector Results  ------------------------------------------------
+
+# Generate the benchmark metrics.
+out1 <- get_table_metrics(params = params_to_use)
+out1$source <- "exp3_gcam"
+
+write.csv(out1,
+          file = file.path("data", "experiments", "exp3_gcam-benchmarks.csv"),
+          row.names = FALSE)
+
+
+# Run Hector with the parameter values
+ini <- system.file(package = "hector", "input/hector_ssp245.ini")
+hc <- my_setvar_fxn(newcore(ini), params_to_use)
+run(hc)
+fetchvars_4comparison(hc, comparison_data) %>%
+    rename(value = hector) ->
+    hector_rslts
+fetchvars(hc, unique(hector_rslts$year), vars = c(CONCENTRATIONS_CH4(), CONCENTRATIONS_N2O())) ->
+    extra
+
+hector_rslts %>%
+    bind_rows(extra) %>%
+    mutate(scenario = "exp3") ->
+    hector_rslts_full
+
+write.csv(hector_rslts_full,
+          file = file.path("data", "experiments", "exp3_hector.csv"),
+          row.names = FALSE)
+
+source <- "exp3"
+
+# the ssp values
+system.file(package = "hector", "input") %>%
+    list.files(pattern = "ssp", full.names = TRUE) ->
+    ALL_SSPS
+out <- batch_ssp_run(inis = ALL_SSPS, params = params_to_use, source = source)
+write.csv(out, "data/experiments/hector_exp3_ssps.csv", row.names = FALSE)
+
+
+
+
+
+
+
+
+

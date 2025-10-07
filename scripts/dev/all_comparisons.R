@@ -7,6 +7,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(paletteer)
+library(scales)
 
 # Plotting aesthetics
 theme_set(theme_bw())
@@ -37,7 +38,8 @@ bind_rows(hector_v32,
     hector_old
 
 bind_rows(read.csv("data/experiments/exp1_gcam-benchmarks.csv"),
-          read.csv("data/experiments/exp2-benchmarks.csv")) %>%
+          read.csv("data/experiments/exp2-benchmarks.csv"),
+          read.csv("data/experiments/exp3_gcam-benchmarks.csv")) %>%
     filter(scenario %in% ar6_data$scenario) ->
     new
 
@@ -45,6 +47,7 @@ bind_rows(read.csv("data/experiments/exp1_gcam-benchmarks.csv"),
 # Load the hector results to be use in the comparison with observations
 bind_rows(read.csv("data/experiments/exp1_hector.csv"),
           read.csv("data/experiments/exp2_hector.csv"),
+          read.csv("data/experiments/exp3_hector.csv"),
           read.csv("data/hector_v32.csv"),
           read.csv("data/hector_v349.csv")) ->
     hector_rslts
@@ -55,6 +58,7 @@ bind_rows(read.csv("data/experiments/exp1_hector.csv"),
 bind_rows(read.csv("data/hector_v32_ssps.csv"),
           read.csv("data/hector_v349_ssps.csv"),
           read.csv("data/experiments/hector_exp1_ssps.csv"),
+          read.csv("data/experiments/hector_exp3_ssps.csv"),
           read.csv("data/experiments/hector_exp2_ssps.csv")) ->
     hector_ssps
 

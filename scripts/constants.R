@@ -12,9 +12,10 @@ library(dplyr)
 library(here)
 library(tidyr)
 library(zoo)
-#remotes::install_github("jgcri/hector@dev")
+#remotes::install_github("jgcri/hector@kd_v35_calibration")
 # we want to use the local version!
-library(hector)
+#library(hector)
+devtools::load_all("~/Documents/Hector-WD/hector/")
 library(readxl)
 
 

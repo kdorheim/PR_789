@@ -8,13 +8,13 @@ source("scripts/fxns_benchmarking.R")
 
 # Flag to indicate if should run the calibration or load previous
 # fit parameter values.
-RUN <- FALSE
+RUN <- TRUE
 
 # 1. Calibration ---------------------------------------------------------------
 
 if(RUN){
     # All three variables free at once.
-    inital_guess <- c("diff" = 2.5, "beta" = 0.36, "q10_rh" = 2.1)
+    inital_guess <- c("diff" = 1.16, "beta" = 0.55, "q10_rh" = 2.2)
 
     # Set up the hector core
     ini <- system.file(package = "hector", "input/hector_ssp245.ini")
@@ -31,21 +31,23 @@ if(RUN){
                         core = core)
 
     fit <- optim(par = inital_guess,
-                  fn = fxn,
-                  lower = c(0.1, 0.001, 0.001),
-                  upper = c(10, 2, 6), method = "L-BFGS-B")
+                 fn = fxn,
+                 # Use the boundaries from Matilda
+                 lower = c(1.042, 0.45, 1.2),
+                 upper = c(1.278, 0.65, 3.2),
+                 method = "L-BFGS-B")
 
 
     # Save the parameter values.
     params_to_use <- round(fit$par, digits = 3)
     write.csv(data.frame(t(params_to_use)),
-              file = file.path("data", "inputs", "params.csv"),
+              file = file.path("inputs", "params.csv"),
               row.names = FALSE)
 
 } else {
 
     # Load the previous parameter values.
-    file <- file.path("data", "inputs", "params.csv")
+    file <- file.path("inputs", "params.csv")
     params_to_use <- read.csv(file)
 }
 

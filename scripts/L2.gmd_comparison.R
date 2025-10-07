@@ -11,7 +11,7 @@ source("scripts/fxns_calibration.R")
     lapply(read.csv) %>%
     do.call(what = "rbind") %>%
     filter(year <= 2100) %>%
-    mutate(source = "v3.2") ->
+    mutate(source = "v32") ->
     hector_ssp_gmd
 
 "data/results/hector_V350_ssps.csv" %>%
@@ -73,7 +73,7 @@ ggplot() +
     scale_color_manual(values = COLORS) ->
     plot; plot
 
-ggsave(plot, filename = "figs/co2_comparison.png", height = 6, width = 6)
+#ggsave(plot, filename = "figs/co2_comparison.png", height = 6, width = 6)
 
 
 cmip6_co2_obs %>%
@@ -96,7 +96,7 @@ MAE_df %>%
     scale_fill_manual(values = COLORS) ->
     co2_mae
 
-ggsave(plot, filename = "figs/co2_mae.png", height = 6, width = 6)
+#ggsave(plot, filename = "figs/co2_mae.png", height = 6, width = 6)
 
 
 ## Global Mean Surface Temperature
@@ -137,7 +137,7 @@ ggplot() +
     scale_color_manual(values = COLORS) ->
     plot; plot
 
-ggsave(plot, filename = "figs/gmst_obs_hector.png", height = 6, width = 6)
+#ggsave(plot, filename = "figs/gmst_obs_hector.png", height = 6, width = 6)
 
 
 hadcrut_obs_data %>%
@@ -160,7 +160,7 @@ MAE_df %>%
     scale_fill_manual(values = COLORS) ->
     plot; plot
 
-ggsave(plot, filename = "figs/gmst_mae.png", height = 6, width = 6)
+#ggsave(plot, filename = "figs/gmst_mae.png", height = 6, width = 6)
 
 # 3. Hector vs. CMIP  -----------------------------------------------------
 
@@ -238,7 +238,7 @@ names(temp_labs) <-  c(GLOBAL_TAS(), LAND_TAS(), SST())
 
 ggplot() +
     geom_ribbon(data = cmip6_temp_summary, aes(year, ymin = min, ymax = max, fill = id), alpha = 0.9) +
-    geom_line(data = hector_temp, aes(year, value, color = source), size = 1) +
+    geom_line(data = hector_temp, aes(year, value, color = source), size = 0.75) +
     facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
     labs(y = expression("Temperature anomaly relative to 1850-1860 ("~degree~"C)"), x = "Year") +
     scale_fill_manual(values = c("very likely" = "#5A5A5A",
@@ -247,27 +247,27 @@ ggplot() +
           panel.grid.minor.y = element_blank(),
           legend.position = "bottom") +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
-    scale_color_manual(values = COLORS) ->
+    scale_color_manual(values = c("v32" =  "#F8766D", "V3.5.0" ="#00BFC4")) ->
     plot; plot
 
 ggsave(plot, filename = "figs/cmip6_ribbon.png", height = 6, width = 6)
 
 
 
-ggplot() +
-    geom_line(data = cmip6_rslts, aes(year, value, group = interaction(model),
-                                      color = "CMIP6 ESM"), alpha = 0.5) +
-    geom_line(data = hector_temp, aes(year, value, color = source), size = 1) +
-    facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
-    labs(y = expression("Temperature anomaly ("~degree~"C)"), x = "Years") +
-    theme(panel.grid.minor.x = element_blank(),
-          panel.grid.minor.y = element_blank(),
-          legend.position = "bottom") +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-    scale_color_manual(values = COLORS) ->
-    plot; plot
-
-ggsave(plot, filename = "figs/cmip6_spagetti.png", height = 6, width = 6)
+# ggplot() +
+#     geom_line(data = cmip6_rslts, aes(year, value, group = interaction(model),
+#                                       color = "CMIP6 ESM"), alpha = 0.5) +
+#     geom_line(data = hector_temp, aes(year, value, color = source), size = 1) +
+#     facet_grid(scenario~variable, labeller = labeller(variable = temp_labs), scales = "free") +
+#     labs(y = expression("Temperature anomaly ("~degree~"C)"), x = "Years") +
+#     theme(panel.grid.minor.x = element_blank(),
+#           panel.grid.minor.y = element_blank(),
+#           legend.position = "bottom") +
+#     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+#     scale_color_manual(values = COLORS) ->
+#     plot; plot
+#
+# ggsave(plot, filename = "figs/cmip6_spagetti.png", height = 6, width = 6)
 
 ## Idealized Runs
 max_yr <- 150
@@ -279,12 +279,9 @@ hector_idealized <- read.csv(file.path("data/GMD_2024", "hector_3.2.0_idealized.
 
 
 read.csv("data/results/output-V3.5.0.csv") %>%
-    filter(scenario %in% c("1pctCO2", "abruptx4CO2"),
+    filter(scenario %in% c("1pctCO2", "abrupt-4xCO2"),
            variable %in% hector_idealized$variable) %>%
-    mutate(scenario = if_else(scenario ==  "abruptx4CO2", "abrupt-4xCO2", scenario)) %>%
-    pivot_longer(-c(version, scenario, variable, units),
-                 names_to = "year") %>%
-    mutate(year = as.integer(gsub(pattern = "X", replace = "", year))) %>%
+    #mutate(scenario = if_else(scenario ==  "abruptx4CO2", "abrupt-4xCO2", scenario)) %>%
     mutate(year = year - 1799) %>%
     filter(year >= 0 & year <= max_yr) ->
     new_hector_idealized
@@ -297,15 +294,15 @@ cmip6_idealized <- read.csv(here::here("data/GMD_2024", "cmip6_idealized.csv")) 
 ggplot() +
     geom_line(data = cmip6_idealized, aes(year, value, group = interaction(model, ensemble),
                                           color = "CMIP6 ESM"), alpha = 0.5) +
-    geom_line(data = hector_idealized, aes(year, value, color = "v3.2")) +
     geom_line(data = new_hector_idealized, aes(year, value, color = "V3.5.0")) +
+    geom_line(data = hector_idealized, aes(year, value, color = "v32")) +
     facet_wrap("scenario", scales = "free") +
     labs(y = expression("Temperature anomaly ("~degree~"C)"), x = "Years") +
     theme(panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_blank(),
           legend.position = "bottom") +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-    scale_color_manual(values = COLORS) ->
+    scale_color_manual(values = c("v32" =  "#F8766D", "V3.5.0" ="#00BFC4")) ->
     plot; plot
 
 ggsave(plot, filename = "figs/cmip6_idealized.png", height = 4, width = 6)

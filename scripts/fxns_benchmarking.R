@@ -63,11 +63,11 @@ get_trce_fxn <- function(params){
 
     # The scenario to use to calculate the TCRE
     ini_tcre <- system.file("input/hector_ssp585.ini", package = "hector")
-    hc <- newcore(ini_tcre)
+    hc <- newcore_CH4_N2O(ini_tcre)
 
     hc <- my_setvar_fxn(hc, pars = params)
 
-    run(hc)
+    run(hc, 2100)
     out <- fetchvars(core = hc,
                      dates = 1750:2300,
                      vars =  c(GLOBAL_TAS(),
@@ -116,9 +116,9 @@ get_trc_fxn <- function(params){
 
     ini <- "inputs/hector_1pctCO2.ini"
     stopifnot(file.exists(ini))
-    hc <- my_setvar_fxn(newcore(ini), pars = params)
+    hc <- my_setvar_fxn(newcore_CH4_N2O(ini), pars = params)
 
-    run(hc)
+    run(hc, runtodate = 2100)
 
     dates <- 1800:2000
     temp  <- fetchvars(hc, dates, GLOBAL_TAS())
@@ -230,7 +230,7 @@ get_hist_metrics <- function(params){
 
     # Set up the hector core with the parameter values of interest.
     ini <- system.file(package = "hector", "input/hector_ssp245.ini")
-    hc  <- my_setvar_fxn(newcore(ini), params)
+    hc  <- my_setvar_fxn(newcore_CH4_N2O(ini), params)
     run(hc)
 
     # historical warming
@@ -272,6 +272,18 @@ get_hist_metrics <- function(params){
 
 ## 1D. future fxns -------------------------------------------------------------
 
+# Since we will want to use the new natural emissions in the future runs load
+# those emissions here
+file.path("inputs", "tables", "nat_n2o.csv") %>%
+    read.csv %>%
+    select(year = Date, value = N2O_natural_emissions, variable = "N2O_natural_emissions") ->
+    natural_n2o
+
+file.path("inputs", "tables", "nat_ch4.csv") %>%
+    read.csv %>%
+    select(year = Date, value = CH4N, variable = NATURAL_CH4()) ->
+    natural_ch4
+
 # For a single ssp scenario
 # Args
 #   ini: path to the ini file
@@ -280,7 +292,17 @@ get_hist_metrics <- function(params){
 get_single_future_warming <- function(ini, params){
 
     scn <- gsub(pattern = "hector_|.ini", replacement = "", x = basename(ini))
-    hc <- my_setvar_fxn(newcore(ini, name = scn), params)
+    hc <- newcore(ini, name = scn)
+
+    # Set the natural N2O emissions!
+    setvar(hc, dates = natural_n2o$year, var = NAT_EMISSIONS_N2O(), values = natural_n2o$value, unit = getunits(NAT_EMISSIONS_N2O()))
+    reset(hc)
+
+    # Set the natural CH4 emissions
+    setvar(hc, dates = natural_n2o$year, var = NAT_EMISSIONS_N2O(), values = natural_n2o$value, unit = getunits(NAT_EMISSIONS_N2O()))
+    reset(hc)
+
+    hc <- my_setvar_fxn(hc, params)
     run(hc)
 
     fetchvars(hc, 1750:2100, vars = GLOBAL_TAS()) %>%
@@ -355,7 +377,7 @@ system.file(package = "hector", "input") %>%
 
 VARS <- c(GMST(), NPP(), VEG_C(), CONCENTRATIONS_CO2(),
           CONCENTRATIONS_CH4(), CONCENTRATIONS_N2O(),
-          HEAT_FLUX(), SST(), GLOBAL_TAS(), LAND_TAS())
+          HEAT_FLUX(), SST(), GLOBAL_TAS(), LAND_TAS(), NAT_EMISSIONS_N2O())
 
 # Helper function that runs a batch of ssps for some parameter combination
 # Args
@@ -370,8 +392,20 @@ batch_ssp_run <- function(inis = ALL_SSPS, params, vars = VARS, source){
         lapply(function(ini){
             scn <- gsub(pattern = "hector_|.ini", replace = "", x = basename(ini))
 
-            hc <- my_setvar_fxn(newcore(ini, name = scn), pars = params)
-            run(hc)
+            hc <- newcore(ini, name = scn)
+
+            # Set the natural N2O emissions!
+            setvar(hc, dates = natural_n2o$year, var = NAT_EMISSIONS_N2O(), values = natural_n2o$value, unit = getunits(NAT_EMISSIONS_N2O()))
+            reset(hc)
+
+            # Set the natural CH4 emissions
+            setvar(hc, dates = natural_n2o$year, var = NAT_EMISSIONS_N2O(), values = natural_n2o$value, unit = getunits(NAT_EMISSIONS_N2O()))
+            reset(hc)
+
+            # Set the parameter values
+            hc <- my_setvar_fxn(hc, pars = params)
+
+            run(hc, 2100)
             fetchvars(hc, 1750:2100, vars = vars)
         }) %>%
         bind_rows %>%
@@ -407,7 +441,8 @@ if(FALSE){
     # Run Hector with the parameter values
     ini <- system.file(package = "hector", "input/hector_ssp245.ini")
     hc <- my_setvar_fxn(newcore(ini), c("aero_scalar" = 1))
-    run(hc)
+
+    run(hc, 2015)
     fetchvars_4comparison(hc, comparison_data) %>%
         rename(value = hector) ->
         hector_rslts

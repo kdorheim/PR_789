@@ -222,7 +222,7 @@ write.csv(out,
 
 # Z. Testing  ------------------------------------------------------------------
 
-if(FALSE){
+if(TRUE){
 
     # Let's run hector with these emissions and see how the comparison looks!
 
@@ -235,10 +235,34 @@ if(FALSE){
     fetchvars(hc,  1745:2015, vars = CONCENTRATIONS_CH4()) ->
         out
 
+    bind_rows(
+        ch4_conc %>%
+            select(year, value) %>%
+            mutate(source = "obs"),
+        out %>%
+            select(year, value) %>%
+            mutate(source = "hector")) %>%
+        filter(year %in% 2000:2005) %>%
+        ggplot() +
+        geom_point(aes(year, value, color = source, linetype = source))
+
 
     ggplot() +
         geom_line(data = ch4_conc, aes(year, value)) +
         geom_line(data = out, aes(year, value, color = "hector"))
+
+    # this is bigger than I probably would have liked however idk if it is
+    # the end of the world
+    ch4_conc %>%
+        select(obs = value, year) %>%
+        left_join(out) %>%
+        mutate(dif = abs(obs - value)) %>%
+        filter(!is.na(dif)) %>%
+        summarise(min = min(dif),
+                  mean = mean(dif),
+                  max = max(dif),
+                  sd = sd(dif))
+
 
 }
 

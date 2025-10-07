@@ -98,15 +98,15 @@ ggplot() +
     labs(y = "degC rel. 1995-2014",
          title = "Global Temp.",
          x = NULL) +
-    facet_wrap("scenario", scales = "free", ncol = 1) +
+    facet_wrap("scenario", scales = "free", ncol = 2) +
     theme(legend.position = "bottom", legend.title = element_blank()) +
     scale_color_manual(values = COLORS) ->
     plot; plot
 
-ggsave(plot, filename = "figs/benchmark_future_warming.png", height = 8, width = 4)
+ggsave(plot, filename = "figs/benchmark_future_warming.png", height = 6, width = 4)
 
 
-# 3. Key Metrics --------------------------------------------------------------
+ # 3. Key Metrics --------------------------------------------------------------
 # The "variables" to be considered here...
 vars <- c("TCR", "TCRE")
 
@@ -344,7 +344,8 @@ plot_ssp <- function(hector_data, MAE_table, VAR){
         labs(title = VAR, y = NULL, x = NULL, caption = "hist. excluded from MAE") +
         geom_table(data = df, aes(x = x, y = y, label = tbl),
                    hjust = 0, vjust = 1) +
-        theme(legend.position = "bottom", legend.title = element_blank()) ->
+        theme(legend.position = "bottom", legend.title = element_blank()) +
+        scale_color_manual(values = c("v32" =  "#F8766D", "V3.5.0" ="#00BFC4")) ->
         out
 
     return(out)

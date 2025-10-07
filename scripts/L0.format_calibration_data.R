@@ -15,36 +15,21 @@ FINAL_YEAR <- 2015
 
 
 # 1. GHG -----------------------------------------------------------------------
-# Citation for all of the GHGs
-# Lan, X., K.W. Thoning, and E.J. Dlugokencky: Trends in globally-averaged CH4,
-#   N2O, and SF6 determined from NOAA Global Monitoring Laboratory measurements.
-#   Version 2025-07, https://doi.org/10.15138/P8XG-AA10
+# For this calibration we want to use the CMIP6 concentrations
 ## 1A. N2O  --------------------------------------------------------------------
 
-# Load the N2O NOAA observations
-fname <- file.path(DIRS$RAW_DATA, "n2o_annmean_gl.csv")
-stopifnot(file.exists(fname))
-
-read.csv(fname, comment.char = "#") %>%
-    select(year, value = mean) %>%
-    mutate(variable = CONCENTRATIONS_N2O(),
-           source = "NOAA") ->
-    noaa_n2o
-
-# Load the N2O observations from RCMIP.
+# Load the N2O historical concentrations from RCMIP or the observations.
 system.file(package  = "hector", "input/tables") %>%
     file.path("ssp245_emiss-constraints_rf.csv") %>%
     read.csv(comment.char = ";") %>%
-    filter(Date <= max(noaa_n2o$year)) %>%
+    filter(Date <= 2015) %>%
     select(year = Date, value = N2O_CONSTRAIN()) %>%
     mutate(variable = CONCENTRATIONS_N2O(),
-           source = "RCMIP") %>%
-    filter(year < min(noaa_n2o$year)) ->
+           source = "RCMIP") ->
     rmcip_obs
 
-# Combine the NOAA and RCMIP values.
-noaa_n2o %>%
-    rbind(rmcip_obs) %>%
+# Format data frame.
+rmcip_obs %>%
     select(year, value, variable) %>%
     mutate(units = getunits(N2O_CONSTRAIN())) %>%
     arrange(year) ->
@@ -52,32 +37,18 @@ noaa_n2o %>%
 
 ## 1B. CH4  --------------------------------------------------------------------
 
-# Load the CH4 NOAA observations
-fname <- file.path(DIRS$RAW_DATA, "ch4_annmean_gl.csv")
-stopifnot(file.exists(fname))
-
-read.csv(fname, comment.char = "#") %>%
-    select(year, value = mean) %>%
-    mutate(variable = CONCENTRATIONS_CH4(),
-           source = "NOAA") ->
-    noaa_ch4
-
-
 # Load the CH4 observations from RCMIP.
 system.file(package  = "hector", "input/tables") %>%
     file.path("ssp245_emiss-constraints_rf.csv") %>%
     read.csv(comment.char = ";") %>%
-    filter(Date <= max(noaa_ch4$year)) %>%
+    filter(Date <= 2015) %>%
     select(year = Date, value = CH4_CONSTRAIN()) %>%
     mutate(variable = CONCENTRATIONS_CH4(),
-           source = "RCMIP") %>%
-    filter(year < min(noaa_ch4$year)) ->
+           source = "RCMIP") ->
     rmcip_obs
 
-
-# Combine the NOAA and RCMIP values.
-noaa_ch4 %>%
-    rbind(rmcip_obs) %>%
+# Format for output
+rmcip_obs %>%
     select(year, value, variable) %>%
     mutate(units = getunits(CH4_CONSTRAIN())) %>%
     arrange(year) ->
@@ -86,32 +57,19 @@ noaa_ch4 %>%
 
 ## 1C. CO2  --------------------------------------------------------------------
 
-# Load the CH4 NOAA observations
-fname <- file.path(DIRS$RAW_DATA, "co2_annmean_mlo.csv")
-stopifnot(file.exists(fname))
-
-read.csv(fname, comment.char = "#") %>%
-    select(year, value = mean) %>%
-    mutate(variable = CONCENTRATIONS_CO2(),
-           source = "NOAA") ->
-    noaa_co2
-
-
 # Load the CH4 observations from RCMIP.
 system.file(package  = "hector", "input/tables") %>%
     file.path("ssp245_emiss-constraints_rf.csv") %>%
     read.csv(comment.char = ";") %>%
-    filter(Date <= max(noaa_co2$year)) %>%
+    filter(Date <= 2015) %>%
     select(year = Date, value = CO2_CONSTRAIN()) %>%
     mutate(variable = CONCENTRATIONS_CO2(),
-           source = "RCMIP") %>%
-    filter(year < min(noaa_co2$year)) ->
+           source = "RCMIP") ->
     rmcip_obs
 
 
-# Combine the NOAA and RCMIP values.
-noaa_co2 %>%
-    rbind(rmcip_obs) %>%
+# Format Output
+rmcip_obs %>%
     select(year, value, variable) %>%
     mutate(units = getunits(CO2_CONSTRAIN())) %>%
     arrange(year) ->
